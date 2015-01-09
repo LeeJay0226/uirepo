@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.widget.ListAdapter;
 
+import com.mbui.sdk.configs.UIOptException;
 import com.mbui.sdk.util.LOG;
 
 /**
@@ -13,7 +14,7 @@ import com.mbui.sdk.util.LOG;
  */
 public class FeatureListView extends AbsFeatureListView {
 
-    ListViewFeature mFeature;
+    private ListViewFeature mFeature;
     private LOG log = new LOG("FeatureListView");
 
     public FeatureListView(Context context) {
@@ -24,14 +25,44 @@ public class FeatureListView extends AbsFeatureListView {
         super(context, attrs);
     }
 
+    public ListViewFeature getFeature() {
+        return mFeature;
+    }
+
     public void setFeature(@NonNull ListViewFeature mFeature) {
-        this.mFeature = mFeature;
-        mFeature.setHost(this);
+        if (getAdapter() != null) {
+            try {
+                throw new UIOptException("adapter is already exist, can not setFeature() after setAdapter()");
+            } catch (UIOptException e) {
+                e.printStackTrace();
+            }
+        } else {
+            this.mFeature = mFeature;
+            mFeature.setHost(this);
+        }
     }
 
     public void setAdapter(ListAdapter adapter) {
         if (mFeature == null)
             setFeature(new ListViewFeature(getContext()));
         super.setAdapter(adapter);
+    }
+
+    /**
+     * 设置ListView当不足一屏时仍然可以上下滑动
+     * 此方法必须在setFeature之前调用,否则无效
+     *
+     * @param isScroll
+     */
+    public void scrollWhenItemInsufficient(boolean isScroll) {
+        if (mFeature != null && mFeature.getHost() != null) {
+            try {
+                throw new UIOptException("can not scrollWhenItemInsufficient() after setFeature()");
+            } catch (UIOptException e) {
+                e.printStackTrace();
+            }
+        } else {
+            fillFooterWhenInsufficient(isScroll);
+        }
     }
 }

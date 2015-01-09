@@ -1,6 +1,7 @@
 package com.mbui.sdk.listview;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
@@ -8,11 +9,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Scroller;
 
 import com.mbui.sdk.util.LOG;
+import com.mbui.sdk.util.UIViewUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +37,8 @@ public class AbsFeatureListView extends ListView implements AbsListView.OnScroll
     private int headerHeight, footerHeight, secHeaderHeight;
     private AbsListViewFeature mFeature;
     private View headerView, footerView;
+    private View footerAdder;
+    private boolean bothScroll;
 
     private ListViewFeature.UDMode upMode = ListViewFeature.UDMode.PULL_SMOOTH;
     private ListViewFeature.UDMode downMode = ListViewFeature.UDMode.PULL_SMOOTH;
@@ -54,6 +59,11 @@ public class AbsFeatureListView extends ListView implements AbsListView.OnScroll
         headerList = new ArrayList<View>();
         footerList = new ArrayList<View>();
         super.setOnScrollListener(this);
+    }
+
+    public void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        log.print("onDraw");
     }
 
     protected final void setAbsFeature(AbsListViewFeature absListViewFeature) {
@@ -197,6 +207,10 @@ public class AbsFeatureListView extends ListView implements AbsListView.OnScroll
             super.removeFooterView(footerView);
         }
         super.addFooterView(view);
+        if (footerAdder == null && bothScroll) {
+            footerAdder = new LinearLayout(getContext());
+            super.addFooterView(footerAdder);
+        }
         if (footerList.size() > 0) {
             addFooterView(footerList);
         }
@@ -224,6 +238,10 @@ public class AbsFeatureListView extends ListView implements AbsListView.OnScroll
         }
     }
 
+    //此方法务必在setFooterView之前调用，否则无效
+    protected void fillFooterWhenInsufficient(boolean bothScroll) {
+        this.bothScroll = bothScroll;
+    }
 
     private void measureView(View child) {
         ViewGroup.LayoutParams p = child.getLayoutParams();
@@ -264,8 +282,19 @@ public class AbsFeatureListView extends ListView implements AbsListView.OnScroll
                 return true;
             ev.setAction(MotionEvent.ACTION_CANCEL);
         }
-        super.dispatchTouchEvent(ev);
-        return true;
+        return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        boolean retBool = super.onInterceptTouchEvent(event);
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_POINTER_DOWN:
+            case MotionEvent.ACTION_UP:
+                return false;
+        }
+        return retBool;
     }
 
     @Override
@@ -297,6 +326,7 @@ public class AbsFeatureListView extends ListView implements AbsListView.OnScroll
     }
 
     protected void resetLayout() {
+        log.print("resetLayout" + ITEM_FLAG_FIRST + "  " + ITEM_FLAG_LAST);
         if (ITEM_FLAG_FIRST && headerView != null) {
             switch (upMode) {
                 case PULL_SMOOTH:
@@ -392,7 +422,7 @@ public class AbsFeatureListView extends ListView implements AbsListView.OnScroll
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
                             float distanceY) {
-        log.print("onScroll :" + distanceY);
+        // log.print("onScroll :" + distanceY + "  ev:" + e2);
         if (Math.abs(distanceY) > 144) return true;
         if ((ITEM_FLAG_FIRST && distanceY > 0) || (ITEM_FLAG_LAST && distanceY < 0)) {
             distanceY = mFeature.touchBuffer * distanceY;
@@ -466,11 +496,23 @@ public class AbsFeatureListView extends ListView implements AbsListView.OnScroll
         this.mScrollListener = mListener;
     }
 
+    private boolean addF = false;
+
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem,
                          int visibleItemCount, int totalItemCount) {
         ITEM_FLAG_FIRST = firstVisibleItem <= 0;
-        ITEM_FLAG_LAST = !ITEM_FLAG_FIRST && firstVisibleItem + visibleItemCount >= totalItemCount;
+        ITEM_FLAG_LAST = !ITEM_FLAG_FIRST && firstVisibleItem + visibleItemCount >= totalItemCount - 1;
+        boolean ITEM_FLAG_BOTH_SCROLL = footerAdder != null && ITEM_FLAG_FIRST && downMode == AbsListViewFeature.UDMode.PULL_SMOOTH
+                && upMode == AbsListViewFeature.UDMode.PULL_SMOOTH && firstVisibleItem + visibleItemCount >= totalItemCount;
+        if (!addF && ITEM_FLAG_BOTH_SCROLL && getBottom() - footerView.getTop() + getDividerHeight() * 2 >= footerHeight) {
+            addF = true;
+            int hh = getBottom() - footerView.getTop() - footerHeight + 2 * getDividerHeight() + 1;
+            UIViewUtil.onSetSize(footerAdder, hh);
+        } else if (addF && !ITEM_FLAG_BOTH_SCROLL && footerAdder != null) {
+            addF = false;
+            UIViewUtil.onSetSize(footerAdder, 0);
+        }
         if (mScrollListener != null) {
             mScrollListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
         }

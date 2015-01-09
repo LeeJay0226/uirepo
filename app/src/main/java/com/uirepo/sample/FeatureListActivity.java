@@ -41,7 +41,7 @@ public class FeatureListActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
                 i = i - mListView.getHeaderViewsCount();
-                if (testClass[i] != null) {
+                if (i >= 0 && i < testClass.length && testClass[i] != null) {
                     Intent intent = new Intent(FeatureListActivity.this, testClass[i]);
                     startActivity(intent);
                 }

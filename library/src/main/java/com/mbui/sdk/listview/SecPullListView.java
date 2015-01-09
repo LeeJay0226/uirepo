@@ -39,7 +39,7 @@ public class SecPullListView extends FeatureListView {
 
     @Override
     public void setAdapter(ListAdapter adapter) {
-        if (mFeature == null)
+        if (getFeature() == null)
             setFeature(new ListViewFeature(getContext()));
         super.setAdapter(adapter);
     }
