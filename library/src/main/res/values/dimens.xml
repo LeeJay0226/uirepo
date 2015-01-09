@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="middle_padding">16dip</dimen>
+    <dimen name="small_padding">8dip</dimen>
+
+    <dimen name="google_height">48dip</dimen>
+
+</resources>

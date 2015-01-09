@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="ui_typeface">
+        <attr name="ui_typeface">
+            <enum name="lantinghei" value="1" />
+            <enum name="gotham_light" value="2" />
+        </attr>
+    </declare-styleable>
+
+</resources>

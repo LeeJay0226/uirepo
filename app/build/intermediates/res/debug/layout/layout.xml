@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+</LinearLayout><!-- From: file:/Users/chenwei/github/uirepo/library/src/main/res/layout/layout.xml --><!-- From: file:/Users/chenwei/github/uirepo/app/build/intermediates/exploded-aar/uirepo/library/unspecified/res/layout/layout.xml -->
