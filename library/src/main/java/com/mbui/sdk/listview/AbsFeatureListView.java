@@ -509,7 +509,7 @@ public class AbsFeatureListView extends ListView implements AbsListView.OnScroll
             addF = true;
             int hh = getBottom() - footerView.getTop() - footerHeight + 2 * getDividerHeight() + 1;
             UIViewUtil.onSetSize(footerAdder, hh);
-        } else if (addF && !ITEM_FLAG_BOTH_SCROLL && footerAdder != null) {
+        } else if (addF && !ITEM_FLAG_BOTH_SCROLL && footerAdder != null && !ITEM_FLAG_FIRST) {
             addF = false;
             UIViewUtil.onSetSize(footerAdder, 0);
         }
