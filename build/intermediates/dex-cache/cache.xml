@@ -27,11 +27,7 @@
         jumboMode="false"
         revision="21.1.2"
         sha1="a85588bec3e2c4584d593d3f15df1677321bca72">
-<<<<<<< HEAD
-        <dex dex="/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/debug/universal-image-loader-1.9.3-bf213bfbc81318b4fb097e539afd77ca8a537a25.jar" />
-=======
         <dex dex="/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/release/universal-image-loader-1.9.3-bf213bfbc81318b4fb097e539afd77ca8a537a25.jar" />
->>>>>>> release/1.0.1
     </item>
     <item
         jar="/Users/chenwei/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.3/support-annotations-21.0.3.jar"
@@ -51,11 +47,7 @@
         jar="/Users/chenwei/github/uirepo/app/build/intermediates/exploded-aar/uirepo/library/unspecified/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-<<<<<<< HEAD
-        sha1="e6ec8a57d36aed86ce44941ed1b89ae6c161aa09">
-        <dex dex="/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/debug/classes-8c3c9ae9ad6be1c0654b8400d8cad6e65d1a8abe.jar" />
-=======
-        sha1="0a8f8308e1c991b3a2544979c8ea96c653deba2a">
+        sha1="463d19f275b20dd8da7d11978642036db7b2b74b">
         <dex dex="/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/release/classes-8c3c9ae9ad6be1c0654b8400d8cad6e65d1a8abe.jar" />
     </item>
     <item
@@ -64,14 +56,6 @@
         revision="21.1.2"
         sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
         <dex dex="/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/release/library-2.4.0-dbfd791cdb63d8e7952c452a02b5b4a1b0908a9a.jar" />
->>>>>>> release/1.0.1
-    </item>
-    <item
-        jar="/Users/chenwei/.gradle/caches/modules-2/files-2.1/com.nineoldandroids/library/2.4.0/e9b63380f3a242dbdbf103a2355ad7e43bad17cb/library-2.4.0.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
-        <dex dex="/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/debug/library-2.4.0-dbfd791cdb63d8e7952c452a02b5b4a1b0908a9a.jar" />
     </item>
 
 </items>

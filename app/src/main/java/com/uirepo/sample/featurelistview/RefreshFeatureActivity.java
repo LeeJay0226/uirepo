@@ -81,6 +81,9 @@ public class RefreshFeatureActivity extends ActionBarActivity {
         //为容器FeatureListView添加refreshListFeature
         mListFeature.addFeature(refreshListFeature);
         //为FeatureListView 设置ListViewFeature
+        //设置当不足一屏幕时可以上下滑动
+        mListView.scrollWhenItemInsufficient(true);
+
         mListView.setFeature(mListFeature);
 
         mAdapter = new SimpleAdapter(this);

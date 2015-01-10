@@ -35,6 +35,8 @@ public class FeatureListActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feature_list);
         mListView = (FeatureListView) findViewById(R.id.list_view);
+        //设置当不足一屏幕时可以上下滑动
+        mListView.scrollWhenItemInsufficient(true);
         mListView.setAdapter(new InnerAdapter(this));
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

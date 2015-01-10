@@ -1,0 +1,9 @@
+/Users/chenwei/github/uirepo/app/build/intermediates/classes/release
+/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/release/support-annotations-21.0.3-8c1e2c3026f853fdd9b8f05495313d2f295f039e.jar
+/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/release/classes-8c3c9ae9ad6be1c0654b8400d8cad6e65d1a8abe.jar
+/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/release/library-2.4.0-dbfd791cdb63d8e7952c452a02b5b4a1b0908a9a.jar
+/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/release/universal-image-loader-1.9.3-bf213bfbc81318b4fb097e539afd77ca8a537a25.jar
+/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/release/internal_impl-21.0.3-b830f6b70411cfc20d17c124ed2c6e8a3887f064.jar
+/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/release/gson-2.3-6af7935dd583f08ba60495195af7684b6ca60f35.jar
+/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/release/classes-41ead5edb753e05e0764ca56cc42ddfa2b5561cc.jar
+/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/release/classes-8fe482a2c8f9ea7f5ab19ccf6af19ccf8f348351.jar

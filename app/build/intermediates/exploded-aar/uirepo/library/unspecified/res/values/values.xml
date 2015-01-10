@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ui_typeface"><attr name="ui_typeface"><enum name="lantinghei" value="1"/><enum name="gotham_light" value="2"/></attr></declare-styleable>
+    <!-- From: file:/Users/chenwei/github/uirepo/library/src/main/res/values/dimens.xml -->
+    <eat-comment/>
+    <dimen name="google_height">48dip</dimen>
+    <dimen name="middle_padding">16dip</dimen>
+    <dimen name="small_padding">8dip</dimen>
+    <!-- From: file:/Users/chenwei/github/uirepo/library/src/main/res/values/strings.xml -->
+    <eat-comment/>
+    <string name="app_name">library</string>
+</resources>

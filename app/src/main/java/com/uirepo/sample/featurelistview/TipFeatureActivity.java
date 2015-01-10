@@ -75,6 +75,8 @@ public class TipFeatureActivity extends ActionBarActivity {
 
         //为容器FeatureListView添加refreshListFeature
         mListFeature.addFeature(tipListFeature);
+        //设置当不足一屏幕时可以上下滑动
+        mListView.scrollWhenItemInsufficient(true);
         //为FeatureListView 设置ListViewFeature
         mListView.setFeature(mListFeature);
 
