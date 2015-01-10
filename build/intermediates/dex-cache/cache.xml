@@ -6,56 +6,56 @@
         jumboMode="false"
         revision="21.1.2"
         sha1="5fc52c41ef0239d1093a1eb7c3697036183677ce">
-        <dex dex="/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/debug/gson-2.3-6af7935dd583f08ba60495195af7684b6ca60f35.jar" />
+        <dex dex="/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/release/gson-2.3-6af7935dd583f08ba60495195af7684b6ca60f35.jar" />
     </item>
     <item
         jar="/Users/chenwei/github/uirepo/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
-        <dex dex="/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/debug/classes-8fe482a2c8f9ea7f5ab19ccf6af19ccf8f348351.jar" />
+        <dex dex="/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/release/classes-8fe482a2c8f9ea7f5ab19ccf6af19ccf8f348351.jar" />
     </item>
     <item
         jar="/Users/chenwei/github/uirepo/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/libs/internal_impl-21.0.3.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
-        <dex dex="/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-b830f6b70411cfc20d17c124ed2c6e8a3887f064.jar" />
+        <dex dex="/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/release/internal_impl-21.0.3-b830f6b70411cfc20d17c124ed2c6e8a3887f064.jar" />
     </item>
     <item
         jar="/Users/chenwei/.gradle/caches/modules-2/files-2.1/com.nostra13.universalimageloader/universal-image-loader/1.9.3/a85588bec3e2c4584d593d3f15df1677321bca72/universal-image-loader-1.9.3.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="a85588bec3e2c4584d593d3f15df1677321bca72">
-        <dex dex="/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/debug/universal-image-loader-1.9.3-bf213bfbc81318b4fb097e539afd77ca8a537a25.jar" />
-    </item>
-    <item
-        jar="/Users/chenwei/.gradle/caches/modules-2/files-2.1/com.nineoldandroids/library/2.4.0/e9b63380f3a242dbdbf103a2355ad7e43bad17cb/library-2.4.0.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
-        <dex dex="/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/debug/library-2.4.0-dbfd791cdb63d8e7952c452a02b5b4a1b0908a9a.jar" />
+        <dex dex="/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/release/universal-image-loader-1.9.3-bf213bfbc81318b4fb097e539afd77ca8a537a25.jar" />
     </item>
     <item
         jar="/Users/chenwei/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.3/support-annotations-21.0.3.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
-        <dex dex="/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-8c1e2c3026f853fdd9b8f05495313d2f295f039e.jar" />
+        <dex dex="/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/release/support-annotations-21.0.3-8c1e2c3026f853fdd9b8f05495313d2f295f039e.jar" />
     </item>
     <item
         jar="/Users/chenwei/github/uirepo/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
-        <dex dex="/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/debug/classes-41ead5edb753e05e0764ca56cc42ddfa2b5561cc.jar" />
+        <dex dex="/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/release/classes-41ead5edb753e05e0764ca56cc42ddfa2b5561cc.jar" />
     </item>
     <item
         jar="/Users/chenwei/github/uirepo/app/build/intermediates/exploded-aar/uirepo/library/unspecified/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="885d4f76369cd6c2d3034163471639c68c13aded">
-        <dex dex="/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/debug/classes-8c3c9ae9ad6be1c0654b8400d8cad6e65d1a8abe.jar" />
+        sha1="0a8f8308e1c991b3a2544979c8ea96c653deba2a">
+        <dex dex="/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/release/classes-8c3c9ae9ad6be1c0654b8400d8cad6e65d1a8abe.jar" />
+    </item>
+    <item
+        jar="/Users/chenwei/.gradle/caches/modules-2/files-2.1/com.nineoldandroids/library/2.4.0/e9b63380f3a242dbdbf103a2355ad7e43bad17cb/library-2.4.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
+        <dex dex="/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/release/library-2.4.0-dbfd791cdb63d8e7952c452a02b5b4a1b0908a9a.jar" />
     </item>
 
 </items>
