@@ -28,6 +28,7 @@ public class UIConfig {
      * 全局的UI参数,提供默认值
      */
     public static class UIOptions {
+        //使用字体，默认为兰亭黑
         public UITypeface.TypeFace typeFace = UITypeface.TypeFace.Lantinghei;
     }
 
