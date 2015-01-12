@@ -335,18 +335,6 @@ public class AbsFeatureListView extends ListView implements AbsListView.OnScroll
     }
 
     @Override
-    public boolean onInterceptTouchEvent(MotionEvent event) {
-        boolean retBool = super.onInterceptTouchEvent(event);
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-            case MotionEvent.ACTION_POINTER_DOWN:
-            case MotionEvent.ACTION_UP:
-                return false;
-        }
-        return retBool;
-    }
-
-    @Override
     public boolean onTouchEvent(MotionEvent ev) {
         // TODO Auto-generated method stub
         mGestureDetector.onTouchEvent(ev);
