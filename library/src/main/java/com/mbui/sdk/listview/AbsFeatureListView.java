@@ -1,7 +1,7 @@
 package com.mbui.sdk.listview;
 
 import android.content.Context;
-import android.graphics.Canvas;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
@@ -17,6 +17,7 @@ import android.widget.Scroller;
 import com.mbui.sdk.util.LOG;
 import com.mbui.sdk.util.UIViewUtil;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,11 +62,6 @@ public class AbsFeatureListView extends ListView implements AbsListView.OnScroll
         super.setOnScrollListener(this);
     }
 
-    public void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        log.print("onDraw");
-    }
-
     protected final void setAbsFeature(AbsListViewFeature absListViewFeature) {
         this.mFeature = absListViewFeature;
         invokeFeature();
@@ -94,7 +90,7 @@ public class AbsFeatureListView extends ListView implements AbsListView.OnScroll
             return;
         }
         if (headerView != null) {
-            super.removeHeaderView(headerView);
+            removeHeaderView(headerView);
         }
         super.addHeaderView(view);
         if (headerList.size() > 0) {
@@ -114,7 +110,7 @@ public class AbsFeatureListView extends ListView implements AbsListView.OnScroll
     @Override
     public void addHeaderView(@NonNull View view) {
         if (headerList.contains(view)) {
-            super.removeHeaderView(view);
+            removeHeaderView(view);
             super.addHeaderView(view);
         } else {
             super.addHeaderView(view);
@@ -141,6 +137,59 @@ public class AbsFeatureListView extends ListView implements AbsListView.OnScroll
         for (View view : headerList)
             removeHeaderView(view);
         headerList.clear();
+    }
+
+    @Override
+    public boolean removeHeaderView(View view) {
+        if (headerList.contains(view)) {
+            headerList.remove(view);
+        }
+        //当API<11时如果getAdapter==null的时候removeHeaderView会报空指针错误
+        if (getAdapter() != null || Build.VERSION.SDK_INT > 10) {
+            return super.removeHeaderView(view);
+        } else {
+            return removeFixedView(view, "mHeaderViewInfos");
+        }
+    }
+
+    //反射改变ListView源码的私有变量
+    private boolean removeFixedView(View view, String fieldName) {
+        try {
+            Field field = ListView.class.getDeclaredField(fieldName);
+            field.setAccessible(true);
+            ArrayList<FixedViewInfo> infos = (ArrayList<FixedViewInfo>) field.get(this);
+            if (infos == null || infos.size() < 1) return false;
+            removeFixedViewInfo(view, infos);
+            field.set(this, infos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    //源码
+    private void removeFixedViewInfo(View v, ArrayList<FixedViewInfo> where) {
+        int len = where.size();
+        for (int i = 0; i < len; ++i) {
+            FixedViewInfo info = where.get(i);
+            if (info.view == v) {
+                where.remove(i);
+                break;
+            }
+        }
+    }
+
+    @Override
+    public boolean removeFooterView(View view) {
+        if (footerList.contains(view)) {
+            footerList.remove(view);
+        }
+        //当API<11时如果getAdapter==null的时候removeFooterView会报空指针错误
+        if (getAdapter() != null || Build.VERSION.SDK_INT > 10) {
+            return super.removeFooterView(view);
+        } else {
+            return removeFixedView(view, "mFooterViewInfos");
+        }
     }
 
     protected void setUpMode(ListViewFeature.UDMode mode) {
@@ -286,6 +335,18 @@ public class AbsFeatureListView extends ListView implements AbsListView.OnScroll
     }
 
     @Override
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        boolean retBool = super.onInterceptTouchEvent(event);
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_POINTER_DOWN:
+            case MotionEvent.ACTION_UP:
+                return false;
+        }
+        return retBool;
+    }
+
+    @Override
     public boolean onTouchEvent(MotionEvent ev) {
         // TODO Auto-generated method stub
         mGestureDetector.onTouchEvent(ev);
@@ -404,7 +465,7 @@ public class AbsFeatureListView extends ListView implements AbsListView.OnScroll
      */
 
     protected void onUpPull(int disY, View view) {
-        log.print("onPull is empty");
+        //  log.print("onPull is empty");
     }
 
     @Override
@@ -490,7 +551,7 @@ public class AbsFeatureListView extends ListView implements AbsListView.OnScroll
     public void onScroll(AbsListView view, int firstVisibleItem,
                          int visibleItemCount, int totalItemCount) {
         ITEM_FLAG_FIRST = firstVisibleItem <= 0;
-        ITEM_FLAG_LAST = !ITEM_FLAG_FIRST && firstVisibleItem + visibleItemCount >= totalItemCount - 1;
+        ITEM_FLAG_LAST = !ITEM_FLAG_FIRST && firstVisibleItem + visibleItemCount >= totalItemCount;
         boolean ITEM_FLAG_BOTH_SCROLL = footerAdder != null && ITEM_FLAG_FIRST && downMode == AbsListViewFeature.UDMode.PULL_SMOOTH
                 && upMode == AbsListViewFeature.UDMode.PULL_SMOOTH && firstVisibleItem + visibleItemCount >= totalItemCount;
         if (!addF && ITEM_FLAG_BOTH_SCROLL && getBottom() - footerView.getTop() + getDividerHeight() * 2 >= footerHeight) {
@@ -556,7 +617,7 @@ public class AbsFeatureListView extends ListView implements AbsListView.OnScroll
     protected void invokeFeature() {
         setHeaderView(mFeature.mHeaderView, mFeature.getUpMode());
         setFooterView(mFeature.mFooterView, mFeature.getDownMode());
-        addHeaderView(getHeaderList());
-        addFooterView(getFooterList());
+        addHeaderView(headerList);
+        addFooterView(footerList);
     }
 }
