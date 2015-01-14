@@ -387,7 +387,7 @@ public final class R {
 		public static final int end = 0x7f080014;
 		public static final int expand_activities_button = 0x7f080024;
 		public static final int expanded_menu = 0x7f08002a;
-		public static final int frame_container = 0x7f080044;
+		public static final int frame_container = 0x7f080047;
 		public static final int gotham_light = 0x7f08001e;
 		public static final int home = 0x7f080004;
 		public static final int homeAsUp = 0x7f08000d;
@@ -397,10 +397,10 @@ public final class R {
 		public static final int lantinghei = 0x7f08001f;
 		public static final int listMode = 0x7f080009;
 		public static final int list_item = 0x7f080027;
-		public static final int loading_footer_progressbar = 0x7f080045;
-		public static final int loading_footer_text = 0x7f080046;
-		public static final int loading_header_text = 0x7f080048;
-		public static final int loading_left_img = 0x7f080047;
+		public static final int loading_footer_progressbar = 0x7f080048;
+		public static final int loading_footer_text = 0x7f080049;
+		public static final int loading_header_text = 0x7f08004b;
+		public static final int loading_left_img = 0x7f08004a;
 		public static final int middle = 0x7f080015;
 		public static final int never = 0x7f080019;
 		public static final int none = 0x7f08000e;
@@ -458,11 +458,11 @@ public final class R {
 		public static final int abc_search_dropdown_item_icons_2line = 0x7f030014;
 		public static final int abc_search_view = 0x7f030015;
 		public static final int abc_simple_dropdown_hint = 0x7f030016;
-		public static final int layout = 0x7f03001d;
-		public static final int support_simple_spinner_dropdown_item = 0x7f03001e;
-		public static final int ui_header_footer_container = 0x7f030020;
-		public static final int ui_pull_to_footer = 0x7f030021;
-		public static final int ui_pull_to_header = 0x7f030022;
+		public static final int layout = 0x7f03001e;
+		public static final int support_simple_spinner_dropdown_item = 0x7f03001f;
+		public static final int ui_header_footer_container = 0x7f030021;
+		public static final int ui_pull_to_footer = 0x7f030022;
+		public static final int ui_pull_to_header = 0x7f030023;
 	}
 	public static final class string {
 		public static final int abc_action_bar_home_description = 0x7f0a0000;

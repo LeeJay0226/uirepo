@@ -8,6 +8,7 @@ import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 
 import com.mbui.sdk.R;
+import com.mbui.sdk.feature.OrgViewFeature;
 import com.mbui.sdk.util.LOG;
 
 /**
@@ -16,20 +17,15 @@ import com.mbui.sdk.util.LOG;
  * <p/>
  * Created by chenwei on 14/12/2.
  */
-public abstract class AbsListViewFeature extends OrgListFeature<AbsFeatureListView> {
+public abstract class AbsListViewFeature extends OrgViewFeature<AbsFeatureListView> implements ViewModeListener {
 
     private LOG log = new LOG("AbsListViewFeature");
     private AbsFeatureListView mListView;
-    View mHeaderView, mFooterView;
-
+    private View mHeaderView, mFooterView;
     public float touchBuffer = 2f, upTouchBuffer = 2f, downTouchBuffer = 2f;
     public float upThreshold = 1f, downThreshold = 1f;
     private UDMode upMode = UDMode.PULL_SMOOTH, downMode = UDMode.PULL_SMOOTH;
     private FrameLayout headerLayout, footerLayout;
-
-    public static enum UDMode {
-        PULL_SMOOTH, PULL_AUTO, PULL_STATE;
-    }
 
     public AbsListViewFeature(Context context) {
         super(context);
@@ -41,6 +37,14 @@ public abstract class AbsListViewFeature extends OrgListFeature<AbsFeatureListVi
         mFooterView = LayoutInflater.from(getContext()).inflate(R.layout.ui_header_footer_container, null);
         headerLayout = (FrameLayout) mHeaderView.findViewById(R.id.frame_container);
         footerLayout = (FrameLayout) mFooterView.findViewById(R.id.frame_container);
+    }
+
+    public View getHeaderView() {
+        return mHeaderView;
+    }
+
+    public View getFooterView() {
+        return mFooterView;
     }
 
     public static AbsListViewFeature getDefault(Context context) {
@@ -60,7 +64,7 @@ public abstract class AbsListViewFeature extends OrgListFeature<AbsFeatureListVi
     }
 
     @Override
-    protected void setHost(AbsFeatureListView absFeatureListView) {
+    public void setHost(AbsFeatureListView absFeatureListView) {
         mListView = absFeatureListView;
         onCreateFeature(absFeatureListView);
         mListView.setAbsFeature(this);

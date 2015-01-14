@@ -36,6 +36,9 @@
         <activity
             android:name="com.uirepo.sample.featurelistview.SecPullListViewActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.uirepo.sample.featurescrollview.ScrollViewActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

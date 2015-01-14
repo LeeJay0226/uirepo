@@ -10,11 +10,10 @@ import android.widget.TextView;
 import com.mbui.sdk.R;
 import com.mbui.sdk.interfaces.OnLoadAction;
 import com.mbui.sdk.interfaces.OnLoadListener;
+import com.mbui.sdk.interfaces.OnRefreshListener;
 import com.mbui.sdk.kits.SmoothProgressView;
-import com.mbui.sdk.listview.AbsFeatureListView;
-import com.mbui.sdk.listview.AbsListViewFeature;
 import com.mbui.sdk.listview.ListViewFeature;
-import com.mbui.sdk.listview.OrgListFeature;
+import com.mbui.sdk.listview.ViewModeListener;
 import com.mbui.sdk.util.LOG;
 
 
@@ -22,7 +21,7 @@ import com.mbui.sdk.util.LOG;
  * Created by chenwei on 14/12/31.
  * 一个自定义的简单下拉刷新特性分支
  */
-public class RefreshListFeature extends OrgListFeature<ListViewFeature> implements OnLoadListener {
+public class RefreshListFeature extends OrgViewFeature<ListViewFeature> implements OnLoadListener {
 
     private LOG log = new LOG("PullToListView");
     private View headerView, footerView;
@@ -94,13 +93,12 @@ public class RefreshListFeature extends OrgListFeature<ListViewFeature> implemen
     /**
      * @param feature
      */
-    @Override
     public void onCreateFeature(final ListViewFeature feature) {
         feature.addHeader(headerView);
-        feature.setUpMode(AbsListViewFeature.UDMode.PULL_SMOOTH);
+        feature.setUpMode(ViewModeListener.UDMode.PULL_SMOOTH);
         feature.addFooter(footerView);
-        feature.setDownMode(AbsListViewFeature.UDMode.PULL_AUTO);
-        feature.getHost().addOnUpRefreshListener(new AbsFeatureListView.OnRefreshListener() {
+        feature.setDownMode(ViewModeListener.UDMode.PULL_AUTO);
+        feature.getHost().addOnUpRefreshListener(new OnRefreshListener() {
             boolean flag = false;
 
             @Override
@@ -124,7 +122,7 @@ public class RefreshListFeature extends OrgListFeature<ListViewFeature> implemen
                 stopSmoothLoading();
             }
         });
-        feature.getHost().addOnDownRefreshListener(new AbsFeatureListView.OnRefreshListener() {
+        feature.getHost().addOnDownRefreshListener(new OnRefreshListener() {
             @Override
             public void onMove(View view, float percent) {
                 if (isNoMore) setFooterText("没有更多了");
@@ -152,7 +150,7 @@ public class RefreshListFeature extends OrgListFeature<ListViewFeature> implemen
         this.isNoMore = true;
         hideProgressBar();
         if (getHost() != null) {
-            getHost().setDownMode(AbsListViewFeature.UDMode.PULL_SMOOTH);
+            getHost().setDownMode(ViewModeListener.UDMode.PULL_SMOOTH);
         }
         //主要是当Item不满一屏时不要让“没有更多了”的文字显示出来
         setFooterText("");
@@ -163,7 +161,7 @@ public class RefreshListFeature extends OrgListFeature<ListViewFeature> implemen
         this.isNoMore = false;
         setFooterText("");
         if (getHost() != null) {
-            getHost().setDownMode(AbsListViewFeature.UDMode.PULL_AUTO);
+            getHost().setDownMode(ViewModeListener.UDMode.PULL_AUTO);
         }
         showProgressBar();
     }

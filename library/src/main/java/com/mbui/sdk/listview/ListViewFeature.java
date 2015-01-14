@@ -7,6 +7,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 
+import com.mbui.sdk.feature.OrgViewFeature;
 import com.mbui.sdk.interfaces.OnTouchGestureListener;
 import com.mbui.sdk.util.LOG;
 
@@ -23,7 +24,7 @@ public class ListViewFeature extends AbsListViewFeature {
     private FeatureListView mListView;
     private OnTouchGestureListener mOnTouchGestureListener;
     private BaseAdapter mAdapter;
-    private List<OrgListFeature<ListViewFeature>> mFeatureList;
+    private List<OrgViewFeature<ListViewFeature>> mFeatureList;
     private AdapterView.OnItemClickListener itemClickListener;
 
     public ListViewFeature(Context context) {
@@ -39,8 +40,8 @@ public class ListViewFeature extends AbsListViewFeature {
     }
 
     @Override
-    protected void onCreateFeature(AbsFeatureListView absFeatureListView) {
-        for (OrgListFeature<ListViewFeature> feature : mFeatureList)
+    public void onCreateFeature(AbsFeatureListView absFeatureListView) {
+        for (OrgViewFeature<ListViewFeature> feature : mFeatureList)
             feature.onCreateFeature(this);
     }
 
@@ -50,8 +51,8 @@ public class ListViewFeature extends AbsListViewFeature {
      * @param featureClass
      * @return
      */
-    public boolean containFeature(Class<? extends OrgListFeature<ListViewFeature>> featureClass) {
-        for (OrgListFeature<ListViewFeature> feature : mFeatureList) {
+    public boolean containFeature(Class<? extends OrgViewFeature<ListViewFeature>> featureClass) {
+        for (OrgViewFeature<ListViewFeature> feature : mFeatureList) {
             if (feature.getClass() == featureClass) {
                 return true;
             }
@@ -62,14 +63,14 @@ public class ListViewFeature extends AbsListViewFeature {
     /**
      * 兼容原则，不冲突的都执行，冲突的以覆盖形式执行
      * <p/>
-     * 特性分支生成规则，继承OrgAbsFeature<ListViewFeature>，
+     * 特性分支生成规则，继承OrgListFeature<ListViewFeature>，
      * 实现public void onCreateFeature(final ListViewFeature feature)；
      * 通过ListViewFeature 变量可以改变基类listView变量属性，feature.getHost可以获取FeatureListView变量
      * 在FeatureListView里暴露了很多基类的接口，通过setListener可以设置很多监听属性
      *
      * @param feature
      */
-    public void addFeature(OrgListFeature<ListViewFeature> feature) {
+    public void addFeature(OrgViewFeature<ListViewFeature> feature) {
         if (!mFeatureList.contains(feature)) {
             mFeatureList.add(feature);
             feature.setHost(this);

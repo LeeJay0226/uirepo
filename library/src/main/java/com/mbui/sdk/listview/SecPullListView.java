@@ -33,7 +33,7 @@ public class SecPullListView extends FeatureListView {
 
     @Override
     public void setFeature(@NonNull ListViewFeature mFeature) {
-        mFeature.setUpMode(AbsListViewFeature.UDMode.PULL_STATE);
+        mFeature.setUpMode(ViewModeListener.UDMode.PULL_STATE);
         super.setFeature(mFeature);
     }
 

@@ -11,10 +11,9 @@ import android.widget.TextView;
 import com.mbui.sdk.R;
 import com.mbui.sdk.interfaces.OnLoadAction;
 import com.mbui.sdk.interfaces.OnLoadListener;
-import com.mbui.sdk.listview.AbsFeatureListView;
-import com.mbui.sdk.listview.AbsListViewFeature;
+import com.mbui.sdk.interfaces.OnRefreshListener;
 import com.mbui.sdk.listview.ListViewFeature;
-import com.mbui.sdk.listview.OrgListFeature;
+import com.mbui.sdk.listview.ViewModeListener;
 
 import java.util.Random;
 
@@ -22,7 +21,7 @@ import java.util.Random;
  * 上拉下拉会出现小标签的特性ListView
  * Created by chenwei on 14/12/31.
  */
-public class TipListFeature extends OrgListFeature<ListViewFeature> implements OnLoadListener {
+public class TipListFeature extends OrgViewFeature<ListViewFeature> implements OnLoadListener {
 
     private View headerView, footerView;
     private TextView headerText, footerText;
@@ -34,7 +33,6 @@ public class TipListFeature extends OrgListFeature<ListViewFeature> implements O
     private OnLoadAction loadAction;
     private boolean hasFooter = true;
     private ShowType upShowTip = ShowType.RANDOM, downShowTip = ShowType.ORDER;
-
 
     public static enum ShowType {
         ORDER, REVERSE, RANDOM
@@ -55,12 +53,12 @@ public class TipListFeature extends OrgListFeature<ListViewFeature> implements O
     }
 
     @Override
-    protected void onCreateFeature(ListViewFeature feature) {
+    public void onCreateFeature(ListViewFeature feature) {
         feature.addHeader(headerView);
-        feature.setUpMode(AbsListViewFeature.UDMode.PULL_SMOOTH);
+        feature.setUpMode(ViewModeListener.UDMode.PULL_SMOOTH);
         feature.addFooter(footerView);
-        feature.setDownMode(hasFooter ? AbsListViewFeature.UDMode.PULL_AUTO : AbsListViewFeature.UDMode.PULL_SMOOTH);
-        feature.getHost().addOnUpRefreshListener(new AbsFeatureListView.OnRefreshListener() {
+        feature.setDownMode(hasFooter ? ViewModeListener.UDMode.PULL_AUTO : ViewModeListener.UDMode.PULL_SMOOTH);
+        feature.getHost().addOnUpRefreshListener(new OnRefreshListener() {
             boolean isShow = false;
             int count = 3 * 4 * 5 * 6 * 7 * 11 * 13;
 
@@ -94,7 +92,7 @@ public class TipListFeature extends OrgListFeature<ListViewFeature> implements O
                 isShow = false;
             }
         });
-        feature.getHost().addOnDownRefreshListener(new AbsFeatureListView.OnRefreshListener() {
+        feature.getHost().addOnDownRefreshListener(new OnRefreshListener() {
             boolean isShow = false;
             int count = 3 * 4 * 5 * 6 * 7 * 11 * 13;
 
@@ -176,14 +174,14 @@ public class TipListFeature extends OrgListFeature<ListViewFeature> implements O
         setFooterText(" ");
         hideProgressBar();
         if (getHost() != null) {
-            getHost().setDownMode(AbsListViewFeature.UDMode.PULL_SMOOTH);
+            getHost().setDownMode(ViewModeListener.UDMode.PULL_SMOOTH);
         }
     }
 
     public void showFooter() {
         hasFooter = true;
         if (getHost() != null) {
-            getHost().setDownMode(AbsListViewFeature.UDMode.PULL_AUTO);
+            getHost().setDownMode(ViewModeListener.UDMode.PULL_AUTO);
         }
     }
 
@@ -196,7 +194,7 @@ public class TipListFeature extends OrgListFeature<ListViewFeature> implements O
     public void loadNoMore() {
         this.isNoMore = true;
         if (getHost() != null) {
-            getHost().setDownMode(AbsListViewFeature.UDMode.PULL_SMOOTH);
+            getHost().setDownMode(ViewModeListener.UDMode.PULL_SMOOTH);
         }
         hideProgressBar();
     }
@@ -206,7 +204,7 @@ public class TipListFeature extends OrgListFeature<ListViewFeature> implements O
         this.isNoMore = false;
         setFooterText("");
         if (getHost() != null) {
-            getHost().setDownMode(AbsListViewFeature.UDMode.PULL_AUTO);
+            getHost().setDownMode(ViewModeListener.UDMode.PULL_AUTO);
         }
         showProgressBar();
     }
