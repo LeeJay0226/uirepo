@@ -8,7 +8,6 @@ import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 
 import com.mbui.sdk.R;
-import com.mbui.sdk.feature.OrgViewFeature;
 import com.mbui.sdk.util.LOG;
 
 /**

@@ -8,4 +8,11 @@
         </attr>
     </declare-styleable>
 
+    <declare-styleable name="feature">
+        <attr name="listview">
+            <enum name="PullToFreshFeature" value="1" />
+            <enum name="tip_feature" value="2" />
+        </attr>
+    </declare-styleable>
+
 </resources>

@@ -1,4 +1,4 @@
-package com.mbui.sdk.feature;
+package com.mbui.sdk.listview;
 
 import android.content.Context;
 

@@ -1,4 +1,4 @@
-package com.mbui.sdk.feature;
+package com.mbui.sdk.listview;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,8 +12,6 @@ import com.mbui.sdk.interfaces.OnLoadAction;
 import com.mbui.sdk.interfaces.OnLoadListener;
 import com.mbui.sdk.interfaces.OnRefreshListener;
 import com.mbui.sdk.kits.SmoothProgressView;
-import com.mbui.sdk.listview.ListViewFeature;
-import com.mbui.sdk.listview.ViewModeListener;
 import com.mbui.sdk.util.LOG;
 
 
