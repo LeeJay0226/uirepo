@@ -7,7 +7,6 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 
-import com.mbui.sdk.feature.OrgViewFeature;
 import com.mbui.sdk.interfaces.OnTouchGestureListener;
 import com.mbui.sdk.util.LOG;
 
