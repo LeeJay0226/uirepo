@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ListAdapter;
+import android.widget.Scroller;
 
 import com.mbui.sdk.R;
 import com.mbui.sdk.feature.abs.AbsViewFeature;
@@ -19,6 +20,7 @@ import com.mbui.sdk.feature.callback.TouchEventCallBack;
 import com.mbui.sdk.feature.pullrefresh.builders.HeaderFooterBuilder;
 import com.mbui.sdk.feature.pullrefresh.builders.PullModeBuilder;
 import com.mbui.sdk.feature.pullrefresh.callback.ControllerCallBack;
+import com.mbui.sdk.feature.pullrefresh.callback.OnLoadCallBack;
 import com.mbui.sdk.feature.pullrefresh.judge.ViewBorderJudge;
 import com.mbui.sdk.util.Debug;
 import com.mbui.sdk.util.UIViewUtil;
@@ -37,7 +39,7 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
     private final String debug = "RefreshController";
 
     private AbsViewFeature<? extends HeaderFooterBuilder> viewFeature;
-    private ViewScroller mScroller;
+    private Scroller mScroller;
     private Context context;
     private ViewBorderJudge judge;
     private View headerView, footerView, innerHeader, innerFooter;
@@ -46,8 +48,12 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
     private GestureDetector mGestureDetector;
     private ControllerCallBack controllerCallBack;
     private PullMode upMode = PullMode.PULL_SMOOTH, downMode = PullMode.PULL_SMOOTH;
+    private OnLoadCallBack loadCallBack;
+    private float touchBuffer = 4f;
+    private float upThreshold = 0.8f, downThreshold = 0.8f;
+    private float upTouchBuffer = 3f, downTouchBuffer = 3f;
 
-    public RefreshController(@NonNull AbsViewFeature<? extends HeaderFooterBuilder> viewFeature, ViewBorderJudge judge, @NonNull ViewScroller scroller) {
+    public RefreshController(@NonNull AbsViewFeature<? extends HeaderFooterBuilder> viewFeature, ViewBorderJudge judge, @NonNull Scroller scroller) {
         this.context = viewFeature.getContext();
         this.viewFeature = viewFeature;
         this.mScroller = scroller;
@@ -61,8 +67,30 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
         footerView = LayoutInflater.from(context).inflate(R.layout.ui_header_footer_container, null);
     }
 
+    public int getHeaderHeight() {
+        return headerHeight;
+    }
+
+    public int getFooterHeight() {
+        return footerHeight;
+    }
+
+    /**
+     * 监听controller返回的所有回调事件
+     *
+     * @param controllerCallBack
+     */
     public void setControllerCallBack(ControllerCallBack controllerCallBack) {
         this.controllerCallBack = controllerCallBack;
+    }
+
+    /**
+     * 监听上拉刷新和加载更多松手后刷新的事件
+     *
+     * @param callBack
+     */
+    public void setLoadCallBack(OnLoadCallBack callBack) {
+        this.loadCallBack = callBack;
     }
 
     @Override
@@ -108,6 +136,10 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
                     case PULL_SMOOTH:
                         headerView.setPadding(0, mScroller.getCurrY(), 0, 0);
                         break;
+                    case PULL_STATE:
+                        onPull(viewFeature.getView(), mScroller.getCurrY());
+                        pullHeight = mScroller.getCurrY();
+                        break;
                 }
             } else {
                 switch (downMode) {
@@ -116,13 +148,13 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
                         break;
                 }
             }
-            mScroller.postInvalidate();
+            viewFeature.getView().postInvalidate();
         }
     }
 
     private void toScrollByY(int fromY, int toY, int duration) {
         mScroller.startScroll(0, fromY, 0, toY - fromY, duration);
-        mScroller.postInvalidate();
+        viewFeature.getView().postInvalidate();
     }
 
     private void toScrollByY(int fromY, int toY) {
@@ -144,7 +176,15 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
         if (judge.arrivedTop()) {
             switch (upMode) {
                 case PULL_SMOOTH:
+                    if (headerView.getPaddingTop() < upThreshold * headerHeight) {
+                        onUpBack();
+                    } else if (headerView.getPaddingTop() > upThreshold * headerHeight) {
+                        onUpRefresh();
+                    }
                     toScrollByY(headerView.getPaddingTop(), -headerHeight);
+                    break;
+                case PULL_STATE:
+                    toScrollByY((int) pullHeight, 0);
                     break;
             }
         }
@@ -154,6 +194,11 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
                     toScrollByY(footerView.getPaddingBottom(), 0);
                     break;
                 case PULL_SMOOTH:
+                    if (footerView.getPaddingBottom() <= downThreshold * footerHeight) {
+                        onDownBack();
+                    } else if (footerView.getPaddingBottom() > downThreshold * footerHeight) {
+                        onDownRefresh();
+                    }
                     toScrollByY(footerView.getPaddingBottom(), -footerHeight);
                     break;
                 default:
@@ -164,16 +209,27 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
             controllerCallBack.resetLayout();
     }
 
+
+    public void scrollTo(int toY) {
+        toScrollByY(mScroller.getCurrY(), toY);
+    }
+
     @Override
     public void onUpRefresh() {
         if (controllerCallBack != null)
             controllerCallBack.onUpRefresh();
+        if (loadCallBack != null) {
+            loadCallBack.loadAll();
+        }
     }
 
     @Override
     public void onDownRefresh() {
         if (controllerCallBack != null)
             controllerCallBack.onDownRefresh();
+        if (loadCallBack != null) {
+            loadCallBack.loadMore();
+        }
     }
 
     @Override
@@ -192,6 +248,12 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
     public void onMove(View view, int height, float percent) {
         if (controllerCallBack != null)
             controllerCallBack.onMove(view, height, percent);
+    }
+
+    @Override
+    public void onPull(View view, int disY) {
+        if (controllerCallBack != null)
+            controllerCallBack.onPull(view, disY);
     }
 
     public void setInnerHeader(@NonNull View view) {
@@ -222,6 +284,7 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
 
     @Override
     public void setUpMode(PullMode mode) {
+        headerView.setPadding(0, 0, 0, 0);
         UIViewUtil.measureView(headerView);
         headerHeight = headerView.getMeasuredHeight();
         switch (mode) {
@@ -306,10 +369,16 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
         return false;
     }
 
+    private float pullHeight, maxPull = -1;
 
-    private float touchBuffer = 4f;
-    private float upThreshold = 0.8f, downThreshold = 0.8f;
-    private float upTouchBuffer = 4f, downTouchBuffer = 4f;
+    /**
+     * PullMode.PULL_STATE下，设置最大下拉距离，<0表示无限下拉
+     *
+     * @param maxPull
+     */
+    public void setMaxPullDown(int maxPull) {
+        this.maxPull = maxPull;
+    }
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
@@ -317,7 +386,21 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
         if ((judge.arrivedTop() && distanceY > 0) || (judge.arrivedBottom() && distanceY < 0)) {
             distanceY = touchBuffer * distanceY;
         }
-        if (judge.arrivedTop() && headerHeight > 0 && upMode == PullMode.PULL_SMOOTH && !(headerView.getPaddingTop() == -headerHeight && distanceY > 0)) {
+        if (judge.arrivedTop() && upMode == PullMode.PULL_STATE) {
+            if (pullHeight - distanceY / touchBuffer > 0 && (maxPull < 0 || pullHeight < maxPull || pullHeight - distanceY / touchBuffer <= maxPull)) {
+                pullHeight -= distanceY / touchBuffer;
+                if (pullHeight > maxPull && maxPull >= 0) pullHeight = maxPull;
+                onPull(viewFeature.getView(), (int) pullHeight);
+                ITEM_FLAG_RETURN = distanceY > 0;
+            } else {
+                if (pullHeight - distanceY / touchBuffer < 1) {
+                    pullHeight = 0;
+                    ITEM_FLAG_RETURN = false;
+                } else {
+                    ITEM_FLAG_RETURN = true;
+                }
+            }
+        } else if (judge.arrivedTop() && headerHeight > 0 && upMode == PullMode.PULL_SMOOTH && !(headerView.getPaddingTop() == -headerHeight && distanceY > 0)) {
             int upPadding = (int) (headerView.getPaddingTop() - distanceY / touchBuffer);
             if (upPadding < -headerHeight) upPadding = -headerHeight;
             onMove(headerView, upPadding + headerHeight, 1.0f * (upPadding + headerHeight) / ((1 + upThreshold) * headerHeight));
@@ -348,9 +431,8 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
         return false;
     }
 
-
     @Override
-    public void onScrollStateChanged(View view, boolean isScrolling) {
+    public void afterOnScrollStateChanged(View view, boolean isScrolling) {
         if (!isScrolling && judge.arrivedBottom()) {
             if (downMode == PullMode.PULL_AUTO) {
                 onDownRefresh();
@@ -359,7 +441,17 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
     }
 
     @Override
-    public void onScroll(View view) {
+    public void afterOnScroll(View view) {
+
+    }
+
+    @Override
+    public void beforeOnScrollStateChanged(View view, boolean isScrolling) {
+
+    }
+
+    @Override
+    public void beforeOnScroll(View view) {
 
     }
 }

@@ -5,8 +5,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mbui.sdk.absviews.FeatureListView;
+import com.mbui.sdk.feature.pullrefresh.callback.OnLoadCallBack;
 import com.mbui.sdk.feature.pullrefresh.features.listview.PullToRefreshFeature;
 import com.uirepo.sample.R;
 
@@ -27,12 +29,24 @@ public class RefreshFeatureActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listview);
         mListView = (FeatureListView) findViewById(R.id.list_view);
-        mListView.addFeature(new PullToRefreshFeature(this));
+        PullToRefreshFeature feature = new PullToRefreshFeature(this);
+        feature.getRefreshController().setLoadCallBack(new OnLoadCallBack() {
+            @Override
+            public void loadMore() {
+                Toast.makeText(RefreshFeatureActivity.this, "loadMore", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void loadAll() {
+                Toast.makeText(RefreshFeatureActivity.this, "loadAll", Toast.LENGTH_SHORT).show();
+            }
+        });
+        mListView.addFeature(feature);
         mListView.addHeaderView(getItem("header 1"));
         mListView.addHeaderView(getItem("header 2"));
         mListView.addFooterView(getItem("footer 1"));
         mListView.addFooterView(getItem("footer 2"));
-        mAdapter=new SimpleAdapter(this);
+        mAdapter = new SimpleAdapter(this);
         mListView.setAdapter(mAdapter);
         mAdapter.setDataList(randStringList(15));
     }

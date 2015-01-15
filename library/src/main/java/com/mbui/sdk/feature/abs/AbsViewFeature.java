@@ -2,11 +2,12 @@ package com.mbui.sdk.feature.abs;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 
 /**
  * Created by chenwei on 15/1/14.
  */
-public abstract class AbsViewFeature<T> implements AbsFeature<T> {
+public abstract class AbsViewFeature<T extends View> implements AbsFeature<T> {
 
     private T host;
     private Context context;
@@ -17,6 +18,10 @@ public abstract class AbsViewFeature<T> implements AbsFeature<T> {
 
     public Context getContext() {
         return context;
+    }
+
+    public View getView() {
+        return host;
     }
 
     /**

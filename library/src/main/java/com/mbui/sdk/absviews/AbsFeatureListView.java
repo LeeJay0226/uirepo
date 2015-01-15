@@ -114,27 +114,36 @@ public abstract class AbsFeatureListView extends FixedListView implements AbsFea
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
+        for (AbsViewFeature<FixedListView> feature : mFeatureList) {
+            if (feature instanceof ScrollCallBack) {
+                ((ScrollCallBack) feature).beforeOnScrollStateChanged(view, scrollState != SCROLL_STATE_IDLE);
+            }
+        }
         if (this.mOnScrollListener != null) {
             mOnScrollListener.onScrollStateChanged(view, scrollState);
         }
         for (AbsViewFeature<FixedListView> feature : mFeatureList) {
             if (feature instanceof ScrollCallBack) {
-                ((ScrollCallBack) feature).onScrollStateChanged(view, scrollState != SCROLL_STATE_IDLE);
+                ((ScrollCallBack) feature).afterOnScrollStateChanged(view, scrollState != SCROLL_STATE_IDLE);
             }
         }
     }
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        for (AbsViewFeature<FixedListView> feature : mFeatureList) {
+            if (feature instanceof ScrollCallBack) {
+                ((ScrollCallBack) feature).beforeOnScroll(view);
+            }
+        }
         if (this.mOnScrollListener != null) {
             mOnScrollListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
         }
         for (AbsViewFeature<FixedListView> feature : mFeatureList) {
             if (feature instanceof ScrollCallBack) {
-                ((ScrollCallBack) feature).onScroll(view);
+                ((ScrollCallBack) feature).afterOnScroll(view);
             }
         }
-        Debug.print(debug,""+firstVisibleItem+"  ;"+visibleItemCount+"  ;"+totalItemCount);
     }
 
     @Override

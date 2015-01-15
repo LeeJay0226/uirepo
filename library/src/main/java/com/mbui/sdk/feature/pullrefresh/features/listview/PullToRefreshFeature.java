@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Scroller;
 import android.widget.TextView;
 
 import com.mbui.sdk.absviews.FixedListView;
@@ -17,10 +18,8 @@ import com.mbui.sdk.feature.callback.ScrollCallBack;
 import com.mbui.sdk.feature.callback.SetAdapterCallBack;
 import com.mbui.sdk.feature.callback.TouchEventCallBack;
 import com.mbui.sdk.feature.pullrefresh.RefreshController;
-import com.mbui.sdk.feature.pullrefresh.ViewScroller;
 import com.mbui.sdk.feature.pullrefresh.callback.ControllerCallBack;
 import com.mbui.sdk.feature.pullrefresh.judge.ViewBorderJudge;
-import com.mbui.sdk.util.Debug;
 
 /**
  * Created by chenwei on 15/1/14.
@@ -29,27 +28,31 @@ public class PullToRefreshFeature extends AbsViewFeature<FixedListView> implemen
         ComputeScrollCallBack, ViewBorderJudge, SetAdapterCallBack, ControllerCallBack, ScrollCallBack {
 
     private static final String debug = "PullToRefreshFeature";
-    private ListView mListView;
     private RefreshController mRefreshController;
-    private ViewScroller mScroller;
+    private Scroller mScroller;
+    private ListView mListView;
 
     public PullToRefreshFeature(Context context) {
         super(context);
-        mScroller = new ViewScroller(context, mListView);
+        mScroller = new Scroller(getContext());
         mRefreshController = new RefreshController(this, this, mScroller);
-        mRefreshController.setControllerCallBack(this);
     }
 
     @Override
     public void setHost(FixedListView host) {
         super.setHost(host);
-        this.mListView = host;
+        mListView=host;
+        mRefreshController.setControllerCallBack(this);
         mRefreshController.setInnerHeader(new TextView(getContext()));
     }
 
     @Override
     public void constructor(Context context, AttributeSet attrs, int defStyle) {
-        Debug.print(debug, "constructor");
+
+    }
+
+    public RefreshController getRefreshController() {
+        return mRefreshController;
     }
 
     @Override
@@ -101,6 +104,26 @@ public class PullToRefreshFeature extends AbsViewFeature<FixedListView> implemen
     }
 
     @Override
+    public void afterOnScrollStateChanged(View view, boolean isScrolling) {
+        mRefreshController.afterOnScrollStateChanged(view, isScrolling);
+    }
+
+    @Override
+    public void afterOnScroll(View view) {
+        mRefreshController.afterOnScroll(view);
+    }
+
+    @Override
+    public void beforeOnScrollStateChanged(View view, boolean isScrolling) {
+
+    }
+
+    @Override
+    public void beforeOnScroll(View view) {
+
+    }
+
+    @Override
     public void stopScroll() {
 
     }
@@ -136,12 +159,8 @@ public class PullToRefreshFeature extends AbsViewFeature<FixedListView> implemen
     }
 
     @Override
-    public void onScrollStateChanged(View view, boolean isScrolling) {
-        mRefreshController.onScrollStateChanged(view, isScrolling);
+    public void onPull(View view, int disY) {
+
     }
 
-    @Override
-    public void onScroll(View view) {
-        mRefreshController.onScroll(view);
-    }
 }

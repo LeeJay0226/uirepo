@@ -135,11 +135,11 @@ public class FeatureListView extends AbsFeatureListView {
 
     @Override
     public View getFirstHeader() {
-        return headerList.getFirst();
+        return headerList.isEmpty() ? null : headerList.getFirst();
     }
 
     @Override
     public View getLastFooter() {
-        return footerList.getLast();
+        return footerList.isEmpty() ? null : footerList.getLast();
     }
 }

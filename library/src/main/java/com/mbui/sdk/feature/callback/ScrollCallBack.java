@@ -7,6 +7,11 @@ import android.view.View;
  */
 public interface ScrollCallBack {
 
-    public void onScrollStateChanged(View view,boolean isScrolling);
-    public void onScroll(View view);
+    public void afterOnScrollStateChanged(View view, boolean isScrolling);
+
+    public void afterOnScroll(View view);
+
+    public void beforeOnScrollStateChanged(View view, boolean isScrolling);
+
+    public void beforeOnScroll(View view);
 }
