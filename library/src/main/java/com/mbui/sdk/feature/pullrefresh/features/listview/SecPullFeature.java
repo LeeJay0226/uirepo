@@ -2,26 +2,17 @@ package com.mbui.sdk.feature.pullrefresh.features.listview;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Scroller;
-import android.widget.TextView;
 
 import com.mbui.sdk.absviews.FixedListView;
-import com.mbui.sdk.feature.abs.AbsViewFeature;
-import com.mbui.sdk.feature.callback.ComputeScrollCallBack;
-import com.mbui.sdk.feature.callback.DispatchTouchEventCallBack;
 import com.mbui.sdk.feature.callback.ScrollCallBack;
-import com.mbui.sdk.feature.callback.SetAdapterCallBack;
-import com.mbui.sdk.feature.callback.TouchEventCallBack;
 import com.mbui.sdk.feature.pullrefresh.RefreshController;
+import com.mbui.sdk.feature.pullrefresh.builders.ListViewFeatureBuilder;
 import com.mbui.sdk.feature.pullrefresh.builders.PullModeBuilder;
 import com.mbui.sdk.feature.pullrefresh.callback.ControllerCallBack;
 import com.mbui.sdk.feature.pullrefresh.callback.SecondItemScrollCallBack;
-import com.mbui.sdk.feature.pullrefresh.judge.ViewBorderJudge;
 import com.mbui.sdk.util.Debug;
 import com.mbui.sdk.util.UIViewUtil;
 import com.nineoldandroids.view.ViewHelper;
@@ -29,61 +20,33 @@ import com.nineoldandroids.view.ViewHelper;
 /**
  * Created by chenwei on 15/1/15.
  */
-public class SecPullFeature extends AbsViewFeature<FixedListView> implements ViewBorderJudge, ComputeScrollCallBack,
-        TouchEventCallBack, DispatchTouchEventCallBack, ControllerCallBack, SetAdapterCallBack, ScrollCallBack, SecondItemScrollCallBack {
+public class SecPullFeature extends ListViewFeatureBuilder<FixedListView> implements ControllerCallBack,
+        ScrollCallBack {
 
     private static final String debug = "SecPullFeature";
     private RefreshController mRefreshController;
-    private Scroller mScroller;
     private ListView mListView;
+    private SecondItemScrollCallBack itemScrollCallBack;
 
     public SecPullFeature(Context context) {
         super(context);
-        mScroller = new Scroller(context);
-        mRefreshController = new RefreshController(this, this, mScroller);
+    }
+
+    @Override
+    public void onCreateRefreshController(RefreshController refreshController) {
+        this.mRefreshController = refreshController;
     }
 
     @Override
     public void setHost(FixedListView host) {
         super.setHost(host);
-        mListView = host;
-        mRefreshController.setControllerCallBack(this);
-        mRefreshController.setInnerHeader(new TextView(getContext()));
-        mRefreshController.setUpMode(PullModeBuilder.PullMode.PULL_STATE);
+        this.mListView = host;
+        this.mRefreshController.setControllerCallBack(this);
+        this.mRefreshController.setUpMode(PullModeBuilder.PullMode.PULL_STATE);
     }
 
     @Override
     public void constructor(Context context, AttributeSet attrs, int defStyle) {
-
-    }
-
-    @Override
-    public boolean arrivedTop() {
-        return getHost() != null && getHost().getFirstVisiblePosition() <= 0;
-    }
-
-    @Override
-    public boolean arrivedBottom() {
-        return false;
-    }
-
-    @Override
-    public boolean beforeOnTouchEvent(MotionEvent event) {
-        return mRefreshController.beforeOnTouchEvent(event);
-    }
-
-    @Override
-    public void afterOnTouchEvent(MotionEvent event) {
-
-    }
-
-    @Override
-    public boolean beforeDispatchTouchEvent(MotionEvent ev) {
-        return mRefreshController.beforeDispatchTouchEvent(ev);
-    }
-
-    @Override
-    public void afterDispatchTouchEvent(MotionEvent event) {
 
     }
 
@@ -118,7 +81,12 @@ public class SecPullFeature extends AbsViewFeature<FixedListView> implements Vie
     }
 
     @Override
-    public void onMove(View view, int diaY, float percent) {
+    public void onUpMove(View view, int disY, float percent) {
+
+    }
+
+    @Override
+    public void onDownMove(View view, int disY, float percent) {
 
     }
 
@@ -126,13 +94,12 @@ public class SecPullFeature extends AbsViewFeature<FixedListView> implements Vie
 
     @Override
     public void onPull(View view, int disY) {
-        Debug.print(debug, "onPull " + (view != null));
         if (view != null && view instanceof ListView && ((ListView) view).getChildCount() > 1) {
             View child = ((ListView) view).getChildAt(1);
             if (originHeight == 0) {
                 UIViewUtil.measureView(child);
                 originHeight = child.getMeasuredHeight();
-                Debug.print(debug, "onPull " + originHeight);
+                Debug.print(debug, "originHeight " + originHeight);
             }
             if (originHeight > 0) {
                 AbsListView.LayoutParams params = (AbsListView.LayoutParams) child.getLayoutParams();
@@ -140,21 +107,6 @@ public class SecPullFeature extends AbsViewFeature<FixedListView> implements Vie
                 child.setLayoutParams(params);
             }
         }
-    }
-
-    @Override
-    public void beforeSetAdapter(ListAdapter adapter) {
-        mRefreshController.beforeSetAdapter(adapter);
-    }
-
-    @Override
-    public void afterSetAdapter(ListAdapter adapter) {
-
-    }
-
-    @Override
-    public void beforeComputeScroll() {
-        mRefreshController.beforeComputeScroll();
     }
 
     @Override
@@ -208,8 +160,12 @@ public class SecPullFeature extends AbsViewFeature<FixedListView> implements Vie
 
     }
 
-    @Override
     public void onSecondItemScroll(float percent) {
+        if (itemScrollCallBack != null)
+            itemScrollCallBack.onSecondItemScroll(percent);
+    }
 
+    public void setSecondItemScrollCallBack(SecondItemScrollCallBack callBack) {
+        this.itemScrollCallBack = callBack;
     }
 }

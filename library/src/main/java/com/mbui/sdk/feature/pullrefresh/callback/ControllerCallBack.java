@@ -26,8 +26,11 @@ public interface ControllerCallBack {
     //PULL_SMOOTH模式下,上拉未达到上拉阈值时松手
     public void onDownBack();
 
-    //PULL_SMOOTH模式下，刷新头出现后监控下拉或者上拉的距离
-    public void onMove(View view, int diaY, float percent);
+    //PULL_SMOOTH模式下，刷新头出现后监控下拉的距离
+    public void onUpMove(View view, int disY, float percent);
+
+    //PULL_SMOOTH模式下，刷新尾出现后监控上拉的距离
+    public void onDownMove(View view, int disY, float percent);
 
     //PULL_STATE模式下，当到达顶部后拉的距离监控
     public void onPull(View view, int disY);

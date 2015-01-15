@@ -75,6 +75,10 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
         return footerHeight;
     }
 
+    public Scroller getScroller() {
+        return mScroller;
+    }
+
     /**
      * 监听controller返回的所有回调事件
      *
@@ -245,9 +249,15 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
     }
 
     @Override
-    public void onMove(View view, int height, float percent) {
+    public void onUpMove(View view, int disY, float percent) {
         if (controllerCallBack != null)
-            controllerCallBack.onMove(view, height, percent);
+            controllerCallBack.onUpMove(view, disY, percent);
+    }
+
+    @Override
+    public void onDownMove(View view, int disY, float percent) {
+        if (controllerCallBack != null)
+            controllerCallBack.onDownMove(view, disY, percent);
     }
 
     @Override
@@ -261,9 +271,17 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
         ((FrameLayout) headerView.findViewById(R.id.frame_container)).addView(innerHeader);
     }
 
+    public View getInnerHeader() {
+        return innerHeader;
+    }
+
     public void setInnerFooter(@NonNull View view) {
         this.innerFooter = view;
         ((FrameLayout) footerView.findViewById(R.id.frame_container)).addView(innerFooter);
+    }
+
+    public View getInnerFooter() {
+        return innerFooter;
     }
 
     @Override
@@ -403,7 +421,7 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
         } else if (judge.arrivedTop() && headerHeight > 0 && upMode == PullMode.PULL_SMOOTH && !(headerView.getPaddingTop() == -headerHeight && distanceY > 0)) {
             int upPadding = (int) (headerView.getPaddingTop() - distanceY / touchBuffer);
             if (upPadding < -headerHeight) upPadding = -headerHeight;
-            onMove(headerView, upPadding + headerHeight, 1.0f * (upPadding + headerHeight) / ((1 + upThreshold) * headerHeight));
+            onUpMove(headerView, upPadding + headerHeight, 1.0f * (upPadding + headerHeight) / ((1 + upThreshold) * headerHeight));
             headerView.setPadding(0, upPadding, 0, 0);
             ITEM_FLAG_RETURN = distanceY > 0;
             touchBuffer = upPadding < headerHeight ? upTouchBuffer : (upTouchBuffer + 1.0f * upPadding / headerHeight);
@@ -411,7 +429,7 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
                 && !(footerView.getPaddingBottom() == -footerHeight && distanceY < 0)) {
             int downPadding = (int) (footerView.getPaddingBottom() + distanceY / touchBuffer);
             if (downPadding < -footerHeight) downPadding = -footerHeight;
-            onMove(footerView, downPadding + footerHeight, 1.0f * (downPadding + footerHeight) / (footerHeight * (1 + downThreshold)));
+            onDownMove(footerView, downPadding + footerHeight, 1.0f * (downPadding + footerHeight) / (footerHeight * (1 + downThreshold)));
             footerView.setPadding(0, 0, 0, downPadding);
             ITEM_FLAG_RETURN = distanceY < 0;
             touchBuffer = downPadding < footerHeight ? downTouchBuffer : (downTouchBuffer + 1.0f * downPadding / footerHeight);
