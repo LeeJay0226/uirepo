@@ -25,6 +25,9 @@ import com.mbui.sdk.feature.pullrefresh.judge.ViewBorderJudge;
 import com.mbui.sdk.util.Debug;
 import com.mbui.sdk.util.UIViewUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by chenwei on 15/1/14.
  * <p/>
@@ -42,16 +45,20 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
     private Scroller mScroller;
     private Context context;
     private ViewBorderJudge judge;
-    private View headerView, footerView, innerHeader, innerFooter;
+    private View headerView, footerView;
+    private List<View> innerHeaderList, innerFooterList;
     private int headerHeight, footerHeight;
     private boolean ITEM_FLAG_RETURN = false;
     private GestureDetector mGestureDetector;
     private ControllerCallBack controllerCallBack;
+    private boolean viewFeatureControllerCallBackEnable = true;
+    private boolean upPullToRefreshEnable = true, downPullToRefreshEnable = false;
     private PullMode upMode = PullMode.PULL_SMOOTH, downMode = PullMode.PULL_SMOOTH;
     private OnLoadCallBack loadCallBack;
-    private float touchBuffer = 4f;
-    private float upThreshold = 0.8f, downThreshold = 0.8f;
-    private float upTouchBuffer = 3f, downTouchBuffer = 3f;
+    private float touchBuffer = 2.5f;
+    private float upThreshold = 0.5f, downThreshold = 0.5f;
+    private float upTouchBuffer = 2.5f, downTouchBuffer = 2.5f;
+
 
     public RefreshController(@NonNull AbsViewFeature<? extends HeaderFooterBuilder> viewFeature, ViewBorderJudge judge, @NonNull Scroller scroller) {
         this.context = viewFeature.getContext();
@@ -65,6 +72,8 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
         mGestureDetector = new GestureDetector(context, this);
         headerView = LayoutInflater.from(context).inflate(R.layout.ui_header_footer_container, null);
         footerView = LayoutInflater.from(context).inflate(R.layout.ui_header_footer_container, null);
+        innerHeaderList = new ArrayList<>();
+        innerFooterList = new ArrayList<>();
     }
 
     public int getHeaderHeight() {
@@ -73,6 +82,14 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
 
     public int getFooterHeight() {
         return footerHeight;
+    }
+
+    public View getHeaderView() {
+        return headerView;
+    }
+
+    public View getFooterView() {
+        return footerView;
     }
 
     public Scroller getScroller() {
@@ -86,6 +103,36 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
      */
     public void setControllerCallBack(ControllerCallBack controllerCallBack) {
         this.controllerCallBack = controllerCallBack;
+    }
+
+    /**
+     * 当ViewFeature继承ControllerCallBack时会自动回调ControllerCallBack的方法
+     * 此参数设置是否自动回调，默认为true
+     *
+     * @param enable
+     */
+    public void setViewFeatureControllerCallBackEnable(boolean enable) {
+        viewFeatureControllerCallBackEnable = enable;
+    }
+
+    /**
+     * 是否支持下拉到阈值后执行刷新操作
+     * 默认为true
+     *
+     * @param enable
+     */
+    public void setUpPullToRefreshEnable(boolean enable) {
+        this.upPullToRefreshEnable = enable;
+    }
+
+    /**
+     * 是否支持上拉到阈值后执行刷新操作
+     * 默认为false
+     *
+     * @param enable
+     */
+    public void setDownPullToRefreshEnable(boolean enable) {
+        this.downPullToRefreshEnable = enable;
     }
 
     /**
@@ -173,6 +220,9 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
         }
         if (controllerCallBack != null)
             controllerCallBack.stopScroll();
+        if (viewFeatureControllerCallBackEnable && controllerCallBack != viewFeature
+                && viewFeature instanceof ControllerCallBack)
+            ((ControllerCallBack) viewFeature).stopScroll();
     }
 
     @Override
@@ -180,7 +230,7 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
         if (judge.arrivedTop()) {
             switch (upMode) {
                 case PULL_SMOOTH:
-                    if (headerView.getPaddingTop() < upThreshold * headerHeight) {
+                    if (!upPullToRefreshEnable || headerView.getPaddingTop() <= upThreshold * headerHeight) {
                         onUpBack();
                     } else if (headerView.getPaddingTop() > upThreshold * headerHeight) {
                         onUpRefresh();
@@ -198,7 +248,7 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
                     toScrollByY(footerView.getPaddingBottom(), 0);
                     break;
                 case PULL_SMOOTH:
-                    if (footerView.getPaddingBottom() <= downThreshold * footerHeight) {
+                    if (!downPullToRefreshEnable || footerView.getPaddingBottom() <= downThreshold * footerHeight) {
                         onDownBack();
                     } else if (footerView.getPaddingBottom() > downThreshold * footerHeight) {
                         onDownRefresh();
@@ -211,8 +261,11 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
         }
         if (controllerCallBack != null)
             controllerCallBack.resetLayout();
+        if (viewFeatureControllerCallBackEnable && controllerCallBack != viewFeature
+                && viewFeature instanceof ControllerCallBack) {
+            ((ControllerCallBack) viewFeature).resetLayout();
+        }
     }
-
 
     public void scrollTo(int toY) {
         toScrollByY(mScroller.getCurrY(), toY);
@@ -222,6 +275,10 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
     public void onUpRefresh() {
         if (controllerCallBack != null)
             controllerCallBack.onUpRefresh();
+        if (viewFeatureControllerCallBackEnable && controllerCallBack != viewFeature
+                && viewFeature instanceof ControllerCallBack) {
+            ((ControllerCallBack) viewFeature).onUpRefresh();
+        }
         if (loadCallBack != null) {
             loadCallBack.loadAll();
         }
@@ -231,6 +288,10 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
     public void onDownRefresh() {
         if (controllerCallBack != null)
             controllerCallBack.onDownRefresh();
+        if (viewFeatureControllerCallBackEnable && controllerCallBack != viewFeature
+                && viewFeature instanceof ControllerCallBack) {
+            ((ControllerCallBack) viewFeature).onDownRefresh();
+        }
         if (loadCallBack != null) {
             loadCallBack.loadMore();
         }
@@ -240,63 +301,83 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
     public void onUpBack() {
         if (controllerCallBack != null)
             controllerCallBack.onUpBack();
+        if (viewFeatureControllerCallBackEnable && controllerCallBack != viewFeature
+                && viewFeature instanceof ControllerCallBack) {
+            ((ControllerCallBack) viewFeature).onUpBack();
+        }
     }
 
     @Override
     public void onDownBack() {
         if (controllerCallBack != null)
             controllerCallBack.onDownBack();
+        if (viewFeatureControllerCallBackEnable && controllerCallBack != viewFeature
+                && viewFeature instanceof ControllerCallBack) {
+            ((ControllerCallBack) viewFeature).onDownBack();
+        }
     }
 
     @Override
     public void onUpMove(View view, int disY, float percent) {
         if (controllerCallBack != null)
             controllerCallBack.onUpMove(view, disY, percent);
+        if (viewFeatureControllerCallBackEnable && controllerCallBack != viewFeature
+                && viewFeature instanceof ControllerCallBack) {
+            ((ControllerCallBack) viewFeature).onUpMove(view, disY, percent);
+        }
     }
 
     @Override
     public void onDownMove(View view, int disY, float percent) {
         if (controllerCallBack != null)
             controllerCallBack.onDownMove(view, disY, percent);
+        if (viewFeatureControllerCallBackEnable && controllerCallBack != viewFeature
+                && viewFeature instanceof ControllerCallBack) {
+            ((ControllerCallBack) viewFeature).onDownMove(view, disY, percent);
+        }
     }
 
     @Override
     public void onPull(View view, int disY) {
         if (controllerCallBack != null)
             controllerCallBack.onPull(view, disY);
+        if (viewFeatureControllerCallBackEnable && controllerCallBack != viewFeature
+                && viewFeature instanceof ControllerCallBack) {
+            ((ControllerCallBack) viewFeature).onPull(view, disY);
+        }
     }
 
-    public void setInnerHeader(@NonNull View view) {
-        this.innerHeader = view;
-        ((FrameLayout) headerView.findViewById(R.id.frame_container)).addView(innerHeader);
+    public void addInnerHeader(@NonNull View view) {
+        innerHeaderList.add(view);
+        ((FrameLayout) headerView.findViewById(R.id.frame_container)).addView(view);
     }
 
-    public View getInnerHeader() {
-        return innerHeader;
+    public List<View> getInnerHeaderList() {
+        return innerHeaderList;
     }
 
-    public void setInnerFooter(@NonNull View view) {
-        this.innerFooter = view;
-        ((FrameLayout) footerView.findViewById(R.id.frame_container)).addView(innerFooter);
+    public void addInnerFooter(@NonNull View view) {
+        innerFooterList.add(view);
+        ((FrameLayout) footerView.findViewById(R.id.frame_container)).addView(view);
     }
 
-    public View getInnerFooter() {
-        return innerFooter;
+    public List<View> getInnerFooterList() {
+        return innerFooterList;
     }
 
     @Override
-    public void removeInnerHeader() {
-        if (innerHeader != null) {
-            ((FrameLayout) headerView.findViewById(R.id.frame_container)).removeView(innerHeader);
-            this.innerHeader = null;
+    public void removeInnerHeader(View view) {
+        if (innerHeaderList.contains(view)) {
+            ((FrameLayout) headerView.findViewById(R.id.frame_container)).removeView(view);
+            this.innerHeaderList.remove(view);
         }
     }
 
     @Override
-    public void removeInnerFooter() {
-        if (innerFooter != null) {
-            ((FrameLayout) headerView.findViewById(R.id.frame_container)).removeView(innerFooter);
-            this.innerFooter = null;
+    public void removeInnerFooter(View view) {
+        if (innerFooterList.contains(view)) {
+            ((FrameLayout) footerView.findViewById(R.id.frame_container)).removeView(view);
+            this.innerFooterList.remove(view);
         }
     }
 
@@ -317,7 +398,11 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
                 return;
         }
         upMode = mode;
-        Debug.print(debug, "headerHeight" + headerHeight);
+    }
+
+    @Override
+    public PullMode getUpMode() {
+        return upMode;
     }
 
     @Override
@@ -338,28 +423,29 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
         downMode = mode;
     }
 
+    @Override
+    public PullMode getDownMode() {
+        return downMode;
+    }
+
 
     @Override
     public void beforeSetAdapter(ListAdapter adapter) {
-        Debug.print(debug, "beforeSetAdapter");
         View firstHeader = viewFeature.getHost().getFirstHeader();
         //如果header容器已存在,就用存在的header
         if (firstHeader != null && firstHeader.getId() == R.id.top_header_footer_container) {
             headerView = firstHeader;
+            for (View view : innerHeaderList) {
+                ((FrameLayout) headerView.findViewById(R.id.frame_container)).addView(view);
+            }
         }
 
         View lastFooter = viewFeature.getHost().getLastFooter();
         //如果footer容器已存在,就用存在的footer
         if (lastFooter != null && lastFooter.getId() == R.id.top_header_footer_container) {
             footerView = lastFooter;
-        }
-        if (innerHeader != null) {
-            ((FrameLayout) headerView.findViewById(R.id.frame_container)).removeView(innerHeader);
-            ((FrameLayout) headerView.findViewById(R.id.frame_container)).addView(innerHeader);
-        }
-        if (innerFooter != null) {
-            ((FrameLayout) footerView.findViewById(R.id.frame_container)).removeView(innerFooter);
-            ((FrameLayout) footerView.findViewById(R.id.frame_container)).addView(innerFooter);
+            for (View view : innerFooterList)
+                ((FrameLayout) footerView.findViewById(R.id.frame_container)).addView(view);
         }
         viewFeature.getHost().addHeaderView(headerView);
         viewFeature.getHost().addFooterView(footerView);

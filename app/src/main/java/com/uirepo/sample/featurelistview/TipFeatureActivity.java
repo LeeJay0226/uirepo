@@ -3,11 +3,12 @@ package com.uirepo.sample.featurelistview;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
+import android.widget.Toast;
 
-import com.mbui.sdk.listview.TipListFeature;
-import com.mbui.sdk.interfaces.OnLoadAction;
-import com.mbui.sdk.listview.FeatureListView;
-import com.mbui.sdk.listview.ListViewFeature;
+import com.mbui.sdk.absviews.FeatureListView;
+import com.mbui.sdk.feature.pullrefresh.callback.OnLoadCallBack;
+import com.mbui.sdk.feature.pullrefresh.features.listview.PullTipFeature;
+import com.mbui.sdk.util.DataProvider;
 import com.uirepo.sample.R;
 
 import java.util.ArrayList;
@@ -19,8 +20,8 @@ import java.util.List;
 public class TipFeatureActivity extends ActionBarActivity {
 
     private FeatureListView mListView;
-    private ListViewFeature mListFeature;
     private SimpleAdapter mAdapter;
+    private PullTipFeature mFeature;
 
     private String[] upTip = new String[]{
             "upTip 1", "upTip 2", "upTip 3", "upTip 4"
@@ -36,48 +37,35 @@ public class TipFeatureActivity extends ActionBarActivity {
         setContentView(R.layout.activity_test_listview);
         mListView = (FeatureListView) findViewById(R.id.list_view);
         //首先创建一个ListViewFeature，ListViewFeature是其他所有自定义Feature的承载者
-        mListFeature = new ListViewFeature(this);
+        mFeature = new PullTipFeature(this);
+        mFeature.setUpTips(upTip, DataProvider.GetWay.RANDOM);
+        mFeature.setDownTips(upTip, DataProvider.GetWay.ORDER);
+        //
+        // mFeature.getRefreshController().setUpPullToRefreshEnable(false);
 
-        //自定义的TipListFeature，继承OrgListFeature<ListViewFeature>
-        final TipListFeature tipListFeature = new TipListFeature(this);
-
-        //刷新头部的图标
-        tipListFeature.setImageResource(R.drawable.cat_me);
-
-        //设置刷新事件，加载更多loadMore，和重新刷新loadAll
-        tipListFeature.setLoadAction(new OnLoadAction() {
+        mFeature.getRefreshController().setLoadCallBack(new OnLoadCallBack() {
             @Override
             public void loadMore() {
+                Toast.makeText(TipFeatureActivity.this, "loadMore", Toast.LENGTH_SHORT).show();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        //加载完成
-                        tipListFeature.completeLoad();
-
-                        //设置当列表数超过30时显示下面的标签
-                        if (mAdapter.getCount() > 40)
-                            tipListFeature.loadNoMore();
-                        else
-                            mAdapter.addDataList(randStringList(10));
+                        if (mAdapter.getCount() < 40) {
+                            mAdapter.addDataList(randStringList(15));
+                        } else {
+                            mFeature.setFooterMode(PullTipFeature.FooterMode.SHOW_TIP);
+                        }
                     }
-                }, 1500);
+                }, 1000);
             }
 
             @Override
             public void loadAll() {
-                //TipListFeature 一般不用这个
             }
         });
-        //设置上面标签，默认出现方式为随机
-        tipListFeature.setUpTipList(upTip, TipListFeature.ShowType.RANDOM);
-        //设置下面标签，默认出现方式为顺序
-        tipListFeature.setDownTipList(downTip, TipListFeature.ShowType.ORDER);
+        mFeature.setHeaderImageResource(R.drawable.mbui_logo);
 
-        //为容器FeatureListView添加refreshListFeature
-        mListFeature.addFeature(tipListFeature);
-        //为FeatureListView 设置ListViewFeature
-        mListView.setFeature(mListFeature);
-
+        mListView.addFeature(mFeature);
         mAdapter = new SimpleAdapter(this);
         //注意setAdapter必须放在setFeature之后
         mListView.setAdapter(mAdapter);

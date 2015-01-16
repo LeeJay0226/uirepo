@@ -14,8 +14,6 @@ import android.widget.Scroller;
 import com.mbui.sdk.R;
 import com.mbui.sdk.configs.UIOptException;
 import com.mbui.sdk.interfaces.OnRefreshListener;
-import com.mbui.sdk.listview.ViewModeListener;
-import com.mbui.sdk.listview.ViewRefreshListener;
 import com.mbui.sdk.util.LOG;
 import com.mbui.sdk.util.UIViewUtil;
 

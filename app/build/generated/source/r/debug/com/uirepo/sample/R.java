@@ -1368,7 +1368,7 @@ containing a value of this type.
         public static final int end=0x7f080014;
         public static final int expand_activities_button=0x7f080026;
         public static final int expanded_menu=0x7f08002c;
-        public static final int frame_container=0x7f08004a;
+        public static final int frame_container=0x7f08004b;
         public static final int gotham_light=0x7f080020;
         public static final int home=0x7f080004;
         public static final int homeAsUp=0x7f08000d;
@@ -1381,7 +1381,7 @@ containing a value of this type.
         public static final int listMode=0x7f080009;
         public static final int list_item=0x7f080029;
         public static final int list_view=0x7f080043;
-        public static final int loading_footer_progressbar=0x7f08004b;
+        public static final int loading_footer_progressbar=0x7f080049;
         public static final int loading_footer_text=0x7f08004c;
         public static final int loading_header_text=0x7f08004e;
         public static final int loading_left_img=0x7f08004d;
@@ -1414,7 +1414,7 @@ containing a value of this type.
         public static final int text=0x7f080048;
         public static final int tip_feature=0x7f08001f;
         public static final int title=0x7f08002b;
-        public static final int top_header_footer_container=0x7f080049;
+        public static final int top_header_footer_container=0x7f08004a;
         public static final int up=0x7f080008;
         public static final int useLogo=0x7f080012;
         public static final int withText=0x7f08001a;
@@ -1458,9 +1458,10 @@ containing a value of this type.
         public static final int layout=0x7f03001f;
         public static final int support_simple_spinner_dropdown_item=0x7f030020;
         public static final int test_list_item=0x7f030021;
-        public static final int ui_header_footer_container=0x7f030022;
-        public static final int ui_pull_to_footer=0x7f030023;
-        public static final int ui_pull_to_header=0x7f030024;
+        public static final int ui_down_loading_footer=0x7f030022;
+        public static final int ui_header_footer_container=0x7f030023;
+        public static final int ui_pull_to_footer=0x7f030024;
+        public static final int ui_pull_to_header=0x7f030025;
     }
     public static final class menu {
         public static final int menu_main=0x7f0c0000;

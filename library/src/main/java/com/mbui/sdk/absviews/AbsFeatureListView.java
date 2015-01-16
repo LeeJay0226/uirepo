@@ -36,15 +36,20 @@ public abstract class AbsFeatureListView extends FixedListView implements AbsFea
     private AbsListView.OnScrollListener mOnScrollListener;
 
     public AbsFeatureListView(Context context) {
-        this(context, null, 0);
+        this(context, null);
     }
 
     public AbsFeatureListView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
+        constructor(context, attrs, 0);
     }
 
     public AbsFeatureListView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        constructor(context, attrs, defStyleAttr);
+    }
+
+    public void constructor(Context context, AttributeSet attrs, int defStyleAttr) {
         this.initSelf();
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.feature);
@@ -77,7 +82,6 @@ public abstract class AbsFeatureListView extends FixedListView implements AbsFea
         if (!mFeatureList.contains(feature)) {
             mFeatureList.add(feature);
             feature.setHost(this);
-            feature.constructor(getContext(), null, 0);
         } else {
             Debug.print(debug, "添加失败，" + feature.getClass().getSimpleName() + " 已存在！！！");
         }

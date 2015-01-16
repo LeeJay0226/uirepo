@@ -1,7 +1,6 @@
 package com.mbui.sdk.feature.pullrefresh.features.listview;
 
 import android.content.Context;
-import android.util.AttributeSet;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
@@ -33,7 +32,7 @@ public class SecPullFeature extends ListViewFeatureBuilder<FixedListView> implem
     }
 
     @Override
-    public void onCreateRefreshController(RefreshController refreshController) {
+    protected void onCreateRefreshController(RefreshController refreshController) {
         this.mRefreshController = refreshController;
     }
 
@@ -41,13 +40,7 @@ public class SecPullFeature extends ListViewFeatureBuilder<FixedListView> implem
     public void setHost(FixedListView host) {
         super.setHost(host);
         this.mListView = host;
-        this.mRefreshController.setControllerCallBack(this);
         this.mRefreshController.setUpMode(PullModeBuilder.PullMode.PULL_STATE);
-    }
-
-    @Override
-    public void constructor(Context context, AttributeSet attrs, int defStyle) {
-
     }
 
     @Override

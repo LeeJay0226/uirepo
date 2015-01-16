@@ -4,8 +4,6 @@ import android.content.Context;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.mbui.sdk.listview.OrgViewFeature;
-import com.mbui.sdk.listview.ViewModeListener;
 import com.mbui.sdk.util.LOG;
 
 import java.util.ArrayList;

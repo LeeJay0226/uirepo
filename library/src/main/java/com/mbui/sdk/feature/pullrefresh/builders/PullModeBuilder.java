@@ -10,15 +10,19 @@ public interface PullModeBuilder {
         PULL_SMOOTH, PULL_AUTO, PULL_STATE;
     }
 
-    public void setInnerHeader(View view);
+    public void addInnerHeader(View view);
 
-    public void setInnerFooter(View view);
+    public void addInnerFooter(View view);
 
-    public void removeInnerHeader();
+    public void removeInnerHeader(View view);
 
-    public void removeInnerFooter();
+    public void removeInnerFooter(View view);
 
     public void setUpMode(PullMode mode);
 
+    public PullMode getUpMode();
+
     public void setDownMode(PullMode mode);
+
+    public PullMode getDownMode();
 }

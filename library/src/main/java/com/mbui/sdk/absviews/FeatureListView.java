@@ -21,11 +21,12 @@ public class FeatureListView extends AbsFeatureListView {
 
 
     public FeatureListView(Context context) {
-        this(context, null, 0);
+        this(context, null);
     }
 
     public FeatureListView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
+        this.initSelf();
     }
 
     public FeatureListView(Context context, AttributeSet attrs, int defStyleAttr) {

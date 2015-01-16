@@ -1,7 +1,7 @@
 package com.mbui.sdk.feature.pullrefresh.features.listview;
 
 import android.content.Context;
-import android.util.AttributeSet;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,8 +12,11 @@ import com.mbui.sdk.R;
 import com.mbui.sdk.absviews.FixedListView;
 import com.mbui.sdk.feature.pullrefresh.RefreshController;
 import com.mbui.sdk.feature.pullrefresh.builders.ListViewFeatureBuilder;
+import com.mbui.sdk.feature.pullrefresh.builders.PullModeBuilder;
 import com.mbui.sdk.feature.pullrefresh.callback.ControllerCallBack;
 import com.mbui.sdk.util.DataProvider;
+import com.mbui.sdk.util.Debug;
+import com.mbui.sdk.util.UITextUtil;
 
 /**
  * Created by chenwei on 15/1/15.
@@ -24,61 +27,121 @@ public class PullTipFeature extends ListViewFeatureBuilder<FixedListView> implem
     private RefreshController mRefreshController;
     private ListView mListView;
     private TextView upTipView, downTipView;
-    private String[] upTips, downTips;
     private DataProvider<String> upTipper, downTipper;
+    private View sysHeader, sysFooter, downLoadingView;
+    private FooterMode footerMode = FooterMode.SHOW_LOADING;
+
+    public static enum FooterMode {
+        SHOW_TIP, SHOW_LOADING
+    }
 
     public PullTipFeature(Context context) {
         super(context);
     }
 
     @Override
-    public void onCreateRefreshController(RefreshController refreshController) {
+    protected void onCreateRefreshController(RefreshController refreshController) {
         this.mRefreshController = refreshController;
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        sysHeader = inflater.inflate(R.layout.ui_pull_to_header, null);
+        upTipView = (TextView) sysHeader.findViewById(R.id.loading_header_text);
+        sysFooter = inflater.inflate(R.layout.ui_pull_to_footer, null);
+        downTipView = (TextView) sysFooter.findViewById(R.id.loading_footer_text);
+        mRefreshController.addInnerHeader(sysHeader);
+        mRefreshController.addInnerFooter(sysFooter);
+
+        downLoadingView = inflater.inflate(R.layout.ui_down_loading_footer, null);
+        mRefreshController.addInnerFooter(downLoadingView);
+        //设置阻止onUpRefresh事件触发
+        mRefreshController.setUpPullToRefreshEnable(false);
+        setFooterMode(FooterMode.SHOW_LOADING);
     }
 
     @Override
     public void setHost(FixedListView host) {
         super.setHost(host);
         mListView = host;
-        mRefreshController.setControllerCallBack(this);
     }
 
-    @Override
-    public void constructor(Context context, AttributeSet attrs, int defStyle) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View header = inflater.inflate(R.layout.ui_pull_to_header, null);
-        upTipView = (TextView) header.findViewById(R.id.loading_header_text);
-        View footer = inflater.inflate(R.layout.ui_pull_to_footer, null);
-        downTipView = (TextView) footer.findViewById(R.id.loading_footer_text);
-        mRefreshController.setInnerHeader(header);
-        mRefreshController.setInnerFooter(footer);
+    /**
+     * 设置Footer的显示mode
+     *
+     * @param mode
+     */
+    public void setFooterMode(FooterMode mode) {
+        if (footerMode != mode) {
+            footerMode = mode;
+            switch (mode) {
+                case SHOW_TIP:
+                    mRefreshController.setDownMode(PullModeBuilder.PullMode.PULL_SMOOTH);
+                    setDownLoadingVisible(false);
+                    setDownTipViewVisible(true);
+                    break;
+                case SHOW_LOADING:
+                    mRefreshController.setDownMode(PullModeBuilder.PullMode.PULL_AUTO);
+                    setDownTipViewVisible(false);
+                    setDownLoadingVisible(true);
+                    break;
+            }
+        }
     }
 
     //设置显示TipText的HeaderView
-    public void setUpTipView(TextView upTipView) {
+    public void setUpTipView(@NonNull TextView upTipView) {
         this.upTipView = upTipView;
     }
 
     //设置显示TipText的FooterView
-    public void setDownTipView(TextView downTipView) {
+    public void setDownTipView(@NonNull TextView downTipView) {
         this.downTipView = downTipView;
     }
 
-    public void setImageResource(int resourceId) {
-        View header = mRefreshController.getInnerHeader();
-        if (header.findViewById(R.id.loading_left_img) != null) {
-            ((ImageView) header.findViewById(R.id.loading_left_img)).setImageResource(resourceId);
+    /**
+     * 为自带的header设置显示图标
+     *
+     * @param resourceId
+     */
+    public void setHeaderImageResource(int resourceId) {
+        if (sysHeader != null) {
+            ((ImageView) sysHeader.findViewById(R.id.loading_left_img)).setImageResource(resourceId);
+        } else {
+            Debug.print(debug, "不是默认的header不能调用函数 setImageResource");
         }
     }
 
-    public void setUpTips(String[] upTips) {
-        this.upTips = upTips;
-        upTipper = new DataProvider<>(upTips, DataProvider.GetWay.RANDOM);
+    /**
+     * 为自带header设置ImageView是否可见
+     *
+     * @param visible
+     */
+    public void setHeaderImageVisible(boolean visible) {
+        if (sysHeader != null) {
+            sysHeader.findViewById(R.id.loading_left_img).setVisibility(visible ? View.VISIBLE : View.GONE);
+        } else {
+            Debug.print(debug, "不是默认的header不能调用函数 setImageVisible");
+        }
     }
 
-    public void setDownTips(String[] downTips) {
-        this.downTips = downTips;
-        downTipper = new DataProvider<>(downTips, DataProvider.GetWay.ORDER);
+    public void setDownLoadingVisible(boolean visible) {
+        downLoadingView.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
+
+    public void setDownTipViewVisible(boolean visible) {
+        downTipView.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
+
+    public void setUpTips(String[] upTips, DataProvider.GetWay way) {
+        upTipper = new DataProvider<>(upTips, way);
+    }
+
+    public void setDownTips(String[] downTips, DataProvider.GetWay way) {
+        downTipper = new DataProvider<>(downTips, way);
+    }
+
+    public void setDownLoadingView(View downLoadingView) {
+        mRefreshController.removeInnerFooter(this.downLoadingView);
+        this.downLoadingView = downLoadingView;
+        mRefreshController.addInnerFooter(downLoadingView);
     }
 
     @Override
@@ -86,8 +149,11 @@ public class PullTipFeature extends ListViewFeatureBuilder<FixedListView> implem
 
     }
 
+    boolean isShow = false;
+
     @Override
     public void resetLayout() {
+        isShow = false;
     }
 
     @Override
@@ -112,15 +178,23 @@ public class PullTipFeature extends ListViewFeatureBuilder<FixedListView> implem
 
     @Override
     public void onUpMove(View view, int disY, float percent) {
+        if (!isShow && upTipper != null) {
+            isShow = true;
+            upTipView.setText(UITextUtil.ignoreNull(upTipper.next()));
+        }
     }
 
     @Override
     public void onDownMove(View view, int disY, float percent) {
-
+        if (!isShow && downTipper != null) {
+            isShow = true;
+            downTipView.setText(UITextUtil.ignoreNull(downTipper.next()));
+        }
     }
 
     @Override
     public void onPull(View view, int disY) {
 
     }
+
 }

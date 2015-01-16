@@ -40,9 +40,8 @@ public abstract class AbsViewFeature<T extends View> implements AbsFeature<T> {
     }
 
     /**
+     * 布局XML里通过标签设置Feature时，constructor会在
      * view的构造函数之后执行,
-     * 对于attrs和defStyle,参数只有在XML里添加feature才有效，
-     * 代码里添加的feature,这两个参数无效
      *
      * @param context
      * @param attrs

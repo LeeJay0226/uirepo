@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.MotionEvent;
 
 import com.mbui.sdk.interfaces.OnTouchGestureListener;
-import com.mbui.sdk.listview.OrgViewFeature;
 import com.mbui.sdk.util.LOG;
 
 import java.util.ArrayList;

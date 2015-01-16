@@ -33,9 +33,10 @@ public class DataProvider<T> {
     }
 
     public T next() {
+        if (ts.length == 0) return null;
         switch (way) {
             case ORDER:
-                return ts[++index % ts.length];
+                return ts[index++ % ts.length];
             case REVERSE:
                 index = (index + ts.length - 1) % ts.length;
                 return ts[index % ts.length];
