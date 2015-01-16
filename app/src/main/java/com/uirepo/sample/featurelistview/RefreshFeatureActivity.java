@@ -1,15 +1,17 @@
 package com.uirepo.sample.featurelistview;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.mbui.sdk.feature.RefreshListFeature;
-import com.mbui.sdk.interfaces.OnLoadAction;
-import com.mbui.sdk.kits.SmoothProgressView;
-import com.mbui.sdk.listview.FeatureListView;
-import com.mbui.sdk.listview.ListViewFeature;
+import com.mbui.sdk.absviews.FeatureListView;
+import com.mbui.sdk.feature.pullrefresh.RefreshController;
+import com.mbui.sdk.feature.pullrefresh.callback.OnLoadCallBack;
+import com.mbui.sdk.feature.pullrefresh.features.listview.PullToRefreshFeature;
 import com.uirepo.sample.R;
 
 import java.util.ArrayList;
@@ -21,77 +23,58 @@ import java.util.List;
 public class RefreshFeatureActivity extends ActionBarActivity {
 
     private FeatureListView mListView;
-    private ListViewFeature mListFeature;
     private SimpleAdapter mAdapter;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test_listview);
+        setContentView(R.layout.activity_listview);
         mListView = (FeatureListView) findViewById(R.id.list_view);
-        //首先创建一个ListViewFeature，ListViewFeature是其他所有自定义Feature的承载者
-        mListFeature = new ListViewFeature(this);
+        final PullToRefreshFeature feature = new PullToRefreshFeature(this);
 
-        //自定义的RefreshListFeature，继承OrgListFeature<ListViewFeature>
-        final RefreshListFeature refreshListFeature = new RefreshListFeature(this);
+        RefreshController controller = feature.getRefreshController();
+        //使用下拉到阈值后刷新的方法时需要setUpPullToRefreshEnable(true),默认是true
+        //controller.setUpPullToRefreshEnable(true);
+        //使用上拉到阈值后刷新的方法时需要setDownPullToRefreshEnable(true),默认是false
+        //controller.setDownPullToRefreshEnable(false);
 
-        //刷新头部的图标
-        refreshListFeature.setImageResource(R.drawable.cat_me);
-
-        SmoothProgressView smoothProgressView = (SmoothProgressView) findViewById(R.id.smooth_progress);
-        smoothProgressView.setColor(Color.RED);
-        //设置刷新效果动画，这里使用自定义的SmoothProgressView，需要在布局文件设置
-        refreshListFeature.setProgressView(smoothProgressView);
-        //设置刷新事件，加载更多loadMore，和下拉刷新loadAll
-        refreshListFeature.setLoadAction(new OnLoadAction() {
+        feature.getRefreshController().setLoadCallBack(new OnLoadCallBack() {
             @Override
             public void loadMore() {
+                Toast.makeText(RefreshFeatureActivity.this, "loadMore", Toast.LENGTH_SHORT).show();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        //加载完成
-                        refreshListFeature.completeLoad();
-
-                        //设置当列表数超过30时显示没有更多了
-                        if (mAdapter.getCount() > 40)
-                            refreshListFeature.loadNoMore();
-                        else
-                            mAdapter.addDataList(randStringList(10));
+                        if (mAdapter.getCount() < 40) {
+                            mAdapter.addDataList(randStringList(15));
+                        } else {
+                            feature.setFooterMode(PullToRefreshFeature.FooterMode.SHOW_NOMORE);
+                        }
                     }
-                }, 1500);
+                }, 1000);
             }
 
             @Override
             public void loadAll() {
-                //重新刷新需要resetLoad
-                refreshListFeature.resetLoad();
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        //加载完成
-                        refreshListFeature.completeLoad();
-
-                        mAdapter.setDataList(randStringList(20));
-                    }
-                }, 2000);
+                Toast.makeText(RefreshFeatureActivity.this, "loadAll", Toast.LENGTH_SHORT).show();
             }
         });
-        //为容器FeatureListView添加refreshListFeature
-        mListFeature.addFeature(refreshListFeature);
-        //为FeatureListView 设置ListViewFeature
-        //设置当不足一屏幕时可以上下滑动
-        mListView.scrollWhenItemInsufficient(true);
 
-        mListView.setFeature(mListFeature);
-
+        feature.setHeaderImageResource(R.drawable.mbui_logo);
+        /**
+         * 支持任意的设置addHeaderView，不会影响到默认刷新头和刷新尾的位置
+         * 当添加多个Feature时默认使用第一个默认的headerView/footerView的容器
+         * 所有的InnerHeaderView/InnerFooterView以覆盖方式存在
+         */
+        mListView.addHeaderView(getItem("header 1"));
+        mListView.addFooterView(getItem("footer 1"));
+        mListView.addFeature(feature);
+        mListView.addHeaderView(getItem("header 2"));
+        mListView.addFooterView(getItem("footer 2"));
         mAdapter = new SimpleAdapter(this);
-        //注意setAdapter必须放在setFeature之后
         mListView.setAdapter(mAdapter);
-
-        //调用下拉刷新函数，这个可以封装在自定义的ListView内部
-        refreshListFeature.tryLoadAll();
+        mAdapter.setDataList(randStringList(15));
     }
 
 
@@ -104,4 +87,10 @@ public class RefreshFeatureActivity extends ActionBarActivity {
         return list;
     }
 
+    public View getItem(String text) {
+        View view = LayoutInflater.from(this).inflate(R.layout.test_list_item, null);
+        TextView tv = (TextView) view.findViewById(R.id.text);
+        tv.setText(text);
+        return view;
+    }
 }

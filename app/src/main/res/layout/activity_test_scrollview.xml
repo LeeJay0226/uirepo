@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.mbui.sdk.scrollview.FeatureScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollview"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/linear_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/item1"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:background="#ff0000"
+            android:text="item 1"
+            android:textSize="28sp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="#00fff0"
+            android:text="item 2"
+            android:textSize="28sp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="#0000ff"
+            android:text="item 3"
+            android:textSize="28sp"/>
+    </LinearLayout>
+</com.mbui.sdk.scrollview.FeatureScrollView>
