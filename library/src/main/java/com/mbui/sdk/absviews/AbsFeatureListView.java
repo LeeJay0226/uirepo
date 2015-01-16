@@ -17,7 +17,10 @@ import com.mbui.sdk.feature.callback.ScrollCallBack;
 import com.mbui.sdk.feature.callback.SetAdapterCallBack;
 import com.mbui.sdk.feature.callback.TouchEventCallBack;
 import com.mbui.sdk.feature.enums.PullRefreshEnum;
+import com.mbui.sdk.feature.pullrefresh.features.listview.PullTipFeature;
 import com.mbui.sdk.feature.pullrefresh.features.listview.PullToRefreshFeature;
+import com.mbui.sdk.feature.pullrefresh.features.listview.SecPullFeature;
+import com.mbui.sdk.feature.pullrefresh.features.listview.SmoothListFeature;
 import com.mbui.sdk.util.Debug;
 
 import java.util.ArrayList;
@@ -57,13 +60,29 @@ public abstract class AbsFeatureListView extends FixedListView implements AbsFea
             if (value == null || value.length() == 0) return;
             AbsViewFeature<FixedListView> innerFeature;
             switch (Integer.parseInt(value)) {
+                case PullRefreshEnum.SmoothListFeature:
+                    innerFeature = new SmoothListFeature(context);
+                    mFeatureList.add(innerFeature);
+                    innerFeature.setHost(this);
+                    innerFeature.constructor(context, attrs, defStyleAttr);
+                    break;
                 case PullRefreshEnum.PullToRefreshFeature:
                     innerFeature = new PullToRefreshFeature(context);
                     mFeatureList.add(innerFeature);
                     innerFeature.setHost(this);
                     innerFeature.constructor(context, attrs, defStyleAttr);
                     break;
-                case PullRefreshEnum.TipFeature:
+                case PullRefreshEnum.PullTipFeature:
+                    innerFeature = new PullTipFeature(context);
+                    mFeatureList.add(innerFeature);
+                    innerFeature.setHost(this);
+                    innerFeature.constructor(context, attrs, defStyleAttr);
+                    break;
+                case PullRefreshEnum.SecPullFeature:
+                    innerFeature = new SecPullFeature(context);
+                    mFeatureList.add(innerFeature);
+                    innerFeature.setHost(this);
+                    innerFeature.constructor(context, attrs, defStyleAttr);
                     break;
             }
         }

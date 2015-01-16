@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="feature"><attr name="listview"><enum name="PullToFreshFeature" value="1"/><enum name="tip_feature" value="2"/></attr></declare-styleable>
+    <declare-styleable name="feature"><attr name="listview"><enum name="SmoothListFeature" value="0"/><enum name="PullToReFreshFeature" value="1"/><enum name="PullTipFeature" value="2"/><enum name="SecPullFeature" value="3"/></attr></declare-styleable>
     <declare-styleable name="ui_typeface"><attr name="ui_typeface"><enum name="lantinghei" value="1"/><enum name="gotham_light" value="2"/></attr></declare-styleable>
     <!-- From: file:/Users/chenwei/github/uirepo/library/src/main/res/values/dimens.xml -->
     <eat-comment/>

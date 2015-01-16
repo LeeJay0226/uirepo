@@ -15,6 +15,7 @@ import com.mbui.sdk.util.UIViewUtil;
 
 /**
  * Created by chenwei on 15/1/16.
+ * ListView 不足一屏时仍然可以上拉下拉
  */
 public class SmoothListFeature extends ListViewFeatureBuilder<FixedListView> {
 

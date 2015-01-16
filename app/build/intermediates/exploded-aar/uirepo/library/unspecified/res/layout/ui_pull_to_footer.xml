@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ui_default_footer"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/google_height"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/google_height">
+
+        <com.mbui.sdk.widget.TTextView
+            android:id="@+id/loading_footer_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text=""
+            android:textColor="#999999" />
+    </RelativeLayout>
+</LinearLayout><!-- From: file:/Users/chenwei/github/uirepo/library/src/main/res/layout/ui_pull_to_footer.xml -->

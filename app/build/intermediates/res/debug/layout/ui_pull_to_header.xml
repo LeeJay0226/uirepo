@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ui_default_header"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/google_height"
+    android:orientation="horizontal"
+    android:gravity="center">
+
+    <ImageView
+        android:id="@+id/loading_left_img"
+        android:layout_width="30dip"
+        android:layout_height="30dip"
+        android:layout_margin="9dp"
+        android:src="@drawable/ic_launcher" />
+
+    <com.mbui.sdk.widget.TTextView
+        android:id="@+id/loading_header_text"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/google_height"
+        android:textColor="#bebbbf"
+        android:layout_marginLeft="10dip"
+        android:maxLines="1"
+        android:gravity="center"
+        android:textSize="14sp"
+        android:text="232323" />
+
+</LinearLayout><!-- From: file:/Users/chenwei/github/uirepo/library/src/main/res/layout/ui_pull_to_header.xml --><!-- From: file:/Users/chenwei/github/uirepo/app/build/intermediates/exploded-aar/uirepo/library/unspecified/res/layout/ui_pull_to_header.xml -->

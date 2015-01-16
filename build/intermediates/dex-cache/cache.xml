@@ -47,13 +47,8 @@
         jar="/Users/chenwei/github/uirepo/app/build/intermediates/exploded-aar/uirepo/library/unspecified/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-<<<<<<< HEAD
-        sha1="463d19f275b20dd8da7d11978642036db7b2b74b">
-        <dex dex="/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/release/classes-8c3c9ae9ad6be1c0654b8400d8cad6e65d1a8abe.jar" />
-=======
-        sha1="62fb37b29e2811236846dc9039fe5f5b71e918fa">
+        sha1="317079205692b5f7d41620ff6e049356a7cc5a1a">
         <dex dex="/Users/chenwei/github/uirepo/app/build/intermediates/pre-dexed/debug/classes-8c3c9ae9ad6be1c0654b8400d8cad6e65d1a8abe.jar" />
->>>>>>> release/1.0.2
     </item>
     <item
         jar="/Users/chenwei/.gradle/caches/modules-2/files-2.1/com.nineoldandroids/library/2.4.0/e9b63380f3a242dbdbf103a2355ad7e43bad17cb/library-2.4.0.jar"
