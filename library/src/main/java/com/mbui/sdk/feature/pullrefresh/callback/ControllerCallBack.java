@@ -9,10 +9,10 @@ import android.view.View;
  */
 public interface ControllerCallBack {
     //停止滑动
-    public void stopScroll();
+    public void onStopScroll();
 
     //回滚
-    public void resetLayout();
+    public void onResetLayout();
 
     //PULL_SMOOTH模式下,下拉超过下拉阈值，松手刷新
     public void onUpRefresh();

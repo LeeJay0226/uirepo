@@ -9,15 +9,20 @@ import android.widget.ListView;
 import com.mbui.sdk.feature.pullrefresh.builders.HeaderFooterBuilder;
 
 import java.lang.reflect.Field;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 /**
  * Created by chenwei on 15/1/15.
  * 作用：
  * 1、修复低版本兼容性bug
- * 2、作为基类继承接口，提高扩展性
+ * 2、继承接口HeaderFooterBuilder，提高扩展性
  */
 public abstract class FixedListView extends ListView implements HeaderFooterBuilder {
+
+    private final String debug = "FeatureListView";
+    private ArrayDeque<View> headerList, footerList;
+
     public FixedListView(Context context) {
         super(context);
     }
@@ -80,4 +85,5 @@ public abstract class FixedListView extends ListView implements HeaderFooterBuil
         }
         return false;
     }
+
 }

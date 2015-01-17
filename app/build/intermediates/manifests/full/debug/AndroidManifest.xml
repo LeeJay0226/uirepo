@@ -28,16 +28,19 @@
             android:name="com.uirepo.sample.FeatureListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.uirepo.sample.featurelistview.RefreshFeatureActivity"
+            android:name="com.uirepo.sample.featurelistview.RefreshListViewActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.uirepo.sample.featurelistview.TipFeatureActivity"
+            android:name="com.uirepo.sample.featurelistview.TipListViewActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.uirepo.sample.featurelistview.SecPullListViewActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.uirepo.sample.featurescrollview.ScrollViewActivity"
+            android:name="com.uirepo.sample.featurescrollview.RefreshScrollViewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.uirepo.sample.featurescrollview.TipScrollViewActivity"
             android:screenOrientation="portrait" />
     </application>
 

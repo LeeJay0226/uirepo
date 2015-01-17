@@ -1,40 +1,48 @@
 package com.mbui.sdk.feature.pullrefresh.builders;
 
 import android.content.Context;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.Scroller;
 
-import com.mbui.sdk.absviews.FixedListView;
+import com.mbui.sdk.feature.abs.AbsFeature;
 import com.mbui.sdk.feature.abs.AbsViewFeature;
+import com.mbui.sdk.feature.callback.AddFeatureCallBack;
 import com.mbui.sdk.feature.callback.ComputeScrollCallBack;
 import com.mbui.sdk.feature.callback.DispatchTouchEventCallBack;
 import com.mbui.sdk.feature.callback.ScrollCallBack;
 import com.mbui.sdk.feature.callback.SetAdapterCallBack;
 import com.mbui.sdk.feature.callback.TouchEventCallBack;
 import com.mbui.sdk.feature.pullrefresh.RefreshController;
-import com.mbui.sdk.feature.pullrefresh.judge.ViewBorderJudge;
-import com.mbui.sdk.util.Debug;
 
 /**
  * Created by chenwei on 15/1/15.
  * <p/>
  * 简单封装了一下内含RefreshController的FixedListView的Feature，统一控制RefreshController必须实现的几个方法
  */
-public abstract class ListViewFeatureBuilder<T extends FixedListView> extends AbsViewFeature<T> implements ViewBorderJudge,
-        SetAdapterCallBack, ComputeScrollCallBack, TouchEventCallBack, DispatchTouchEventCallBack, ScrollCallBack {
+public abstract class ListViewFeatureBuilder<T extends HeaderFooterBuilder> extends AbsViewFeature<T> implements ComputeScrollCallBack,
+        TouchEventCallBack, DispatchTouchEventCallBack, ScrollCallBack, AddFeatureCallBack, SetAdapterCallBack {
 
-    private String debug = "ListViewFeatureBuilder";
+    private String debug = "ScrollViewFeatureBuilder";
     private RefreshController mRefreshController;
+    private TYPE type = TYPE.UNKNOWN;
+
+    private enum TYPE {
+        LISTVIEW, SCROLLVIEW, UNKNOWN;
+    }
 
     public ListViewFeatureBuilder(Context context) {
         super(context);
-        mRefreshController = new RefreshController(this, this, new Scroller(context));
-        Debug.print(debug, "onCreateRefreshController");
+        mRefreshController = new RefreshController(this, new Scroller(context));
         onCreateRefreshController(mRefreshController);
+    }
+
+    public RefreshController getRefreshController() {
+        return mRefreshController;
     }
 
     @Override
@@ -42,8 +50,19 @@ public abstract class ListViewFeatureBuilder<T extends FixedListView> extends Ab
 
     }
 
-    public RefreshController getRefreshController() {
-        return mRefreshController;
+    @Override
+    public void setHost(T builder) {
+        super.setHost(builder);
+        if (builder instanceof ListView) {
+            type = TYPE.LISTVIEW;
+            // 将控制的View变量传入RefreshController，
+            mRefreshController.setControllerView((View) builder);
+        } else if (builder instanceof ScrollView) {
+            type = TYPE.SCROLLVIEW;
+            mRefreshController.setControllerView((View) builder);
+        } else {
+            type = TYPE.UNKNOWN;
+        }
     }
 
     protected abstract void onCreateRefreshController(RefreshController refreshController);
@@ -65,16 +84,6 @@ public abstract class ListViewFeatureBuilder<T extends FixedListView> extends Ab
     }
 
     @Override
-    public void beforeSetAdapter(ListAdapter adapter) {
-        mRefreshController.beforeSetAdapter(adapter);
-    }
-
-    @Override
-    public void afterSetAdapter(ListAdapter adapter) {
-
-    }
-
-    @Override
     public boolean beforeOnTouchEvent(MotionEvent event) {
         return mRefreshController.beforeOnTouchEvent(event);
     }
@@ -84,37 +93,36 @@ public abstract class ListViewFeatureBuilder<T extends FixedListView> extends Ab
 
     }
 
+
     @Override
-    public boolean arrivedTop() {
-        return getHost() != null && getHost().getFirstVisiblePosition() <= 0;
+    public void onScrollStateChanged(View view, boolean isScrolling) {
+        mRefreshController.onScrollStateChanged(view, isScrolling);
     }
 
     @Override
-    public boolean arrivedBottom() {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
-            return getHost().getLastVisiblePosition() == getHost().getCount() - 1 && getHost().getFirstVisiblePosition() != 0;
-        } else {
-            return getHost().getLastVisiblePosition() >= getHost().getCount() - 2 && getHost().getFirstVisiblePosition() != 0;
-        }
-    }
-
-
-    @Override
-    public void afterOnScrollStateChanged(View view, boolean isScrolling) {
-        mRefreshController.afterOnScrollStateChanged(view, isScrolling);
-    }
-
-    @Override
-    public void afterOnScroll(View view) {
-    }
-
-    @Override
-    public void beforeOnScrollStateChanged(View view, boolean isScrolling) {
+    public void onScroll(View view) {
 
     }
 
     @Override
-    public void beforeOnScroll(View view) {
+    public void beforeAddFeature(AbsFeature feature) {
+
+    }
+
+    @Override
+    public void afterAddFeature(AbsFeature feature) {
+        if (type == TYPE.SCROLLVIEW)
+            mRefreshController.loadController();
+    }
+
+    @Override
+    public void beforeSetAdapter(ListAdapter adapter) {
+        if (type == TYPE.LISTVIEW)
+            mRefreshController.loadController();
+    }
+
+    @Override
+    public void afterSetAdapter(ListAdapter adapter) {
 
     }
 }

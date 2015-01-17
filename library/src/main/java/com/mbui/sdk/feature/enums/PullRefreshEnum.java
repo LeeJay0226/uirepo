@@ -8,6 +8,8 @@ package com.mbui.sdk.feature.enums;
  * Created by chenwei on 15/1/14.
  */
 public class PullRefreshEnum {
+    public static final int SmoothListFeature = 0;
     public static final int PullToRefreshFeature = 1;
-    public static final int TipFeature = 2;
+    public static final int PullTipFeature = 2;
+    public static final int SecPullFeature = 3;
 }

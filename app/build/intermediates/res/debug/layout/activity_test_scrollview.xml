@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.mbui.sdk.scrollview.FeatureScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.mbui.sdk.absviews.FeatureScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/scrollview"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -31,4 +31,4 @@
             android:text="item 3"
             android:textSize="28sp"/>
     </LinearLayout>
-</com.mbui.sdk.scrollview.FeatureScrollView><!-- From: file:/Users/chenwei/github/uirepo/app/src/main/res/layout/activity_test_scrollview.xml -->
+</com.mbui.sdk.absviews.FeatureScrollView><!-- From: file:/Users/chenwei/github/uirepo/app/src/main/res/layout/activity_test_scrollview.xml -->

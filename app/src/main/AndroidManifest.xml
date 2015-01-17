@@ -23,16 +23,19 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".featurelistview.RefreshFeatureActivity"
+            android:name=".featurelistview.RefreshListViewActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".featurelistview.TipFeatureActivity"
+            android:name=".featurelistview.TipListViewActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".featurelistview.SecPullListViewActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".featurescrollview.ScrollViewActivity"
+            android:name=".featurescrollview.RefreshScrollViewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".featurescrollview.TipScrollViewActivity"
             android:screenOrientation="portrait" />
     </application>
 

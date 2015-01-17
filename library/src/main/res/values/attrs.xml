@@ -10,8 +10,14 @@
 
     <declare-styleable name="feature">
         <attr name="listview">
-            <enum name="PullToFreshFeature" value="1" />
-            <enum name="tip_feature" value="2" />
+            <enum name="SmoothListFeature" value="0" />
+            <enum name="PullToReFreshFeature" value="1" />
+            <enum name="PullTipFeature" value="2" />
+            <enum name="SecPullFeature" value="3" />
+        </attr>
+        <attr name="scrollview">
+            <enum name="PullToRefreshFeature" value="1" />
+            <enum name="PullTipFeature" value="2" />
         </attr>
     </declare-styleable>
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ui_default_footer"
     android:layout_width="match_parent"
     android:layout_height="@dimen/google_height"
     android:orientation="vertical">
@@ -7,15 +8,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/google_height">
-
-        <ProgressBar
-            android:id="@+id/loading_footer_progressbar"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:layout_centerInParent="true"
-            android:layout_margin="11dp"
-            android:visibility="gone"
-            android:indeterminateDrawable="@drawable/ui_rotate_shape_loading" />
 
         <com.mbui.sdk.widget.TTextView
             android:id="@+id/loading_footer_text"

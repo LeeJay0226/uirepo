@@ -13,9 +13,9 @@ import android.widget.TextView;
 
 import com.mbui.sdk.absviews.FeatureListView;
 import com.mbui.sdk.feature.pullrefresh.features.listview.SmoothListFeature;
-import com.uirepo.sample.featurelistview.RefreshFeatureActivity;
-import com.uirepo.sample.featurelistview.SecPullListViewActivity;
-import com.uirepo.sample.featurelistview.TipFeatureActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by chenwei on 15/1/7.
@@ -23,13 +23,8 @@ import com.uirepo.sample.featurelistview.TipFeatureActivity;
 public class FeatureListActivity extends ActionBarActivity {
 
     public FeatureListView mListView;
-    private String[] dataList = new String[]{
-            "RefreshFeature", "TipFeature", "SecPullListView"
-    };
 
-    private Class[] testClass = new Class[]{
-            RefreshFeatureActivity.class, TipFeatureActivity.class, SecPullListViewActivity.class
-    };
+    private List<Class> testClass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,14 +32,22 @@ public class FeatureListActivity extends ActionBarActivity {
         setContentView(R.layout.activity_feature_list);
         mListView = (FeatureListView) findViewById(R.id.list_view);
         mListView.addFeature(new SmoothListFeature(this));
+        testClass = new ArrayList<>();
+        ArrayList<String> data = getIntent().getStringArrayListExtra("classes");
+        for (int i = 0; data != null && i < data.size(); i++) {
+            try {
+                testClass.add(Class.forName(data.get(i)));
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
         mListView.setAdapter(new InnerAdapter(this));
-
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
                 i = i - mListView.getHeaderViewsCount();
-                if (i >= 0 && i < testClass.length && testClass[i] != null) {
-                    Intent intent = new Intent(FeatureListActivity.this, testClass[i]);
+                if (i >= 0 && i < testClass.size() && testClass.get(i) != null) {
+                    Intent intent = new Intent(FeatureListActivity.this, testClass.get(i));
                     startActivity(intent);
                 }
             }
@@ -62,7 +65,7 @@ public class FeatureListActivity extends ActionBarActivity {
 
         @Override
         public int getCount() {
-            return dataList == null ? 0 : dataList.length;
+            return testClass == null ? 0 : testClass.size();
         }
 
         @Override
@@ -85,7 +88,7 @@ public class FeatureListActivity extends ActionBarActivity {
             } else {
                 textTitle = (TextView) view.getTag();
             }
-            textTitle.setText(dataList[position]);
+            textTitle.setText(testClass.get(position).getSimpleName());
             return view;
         }
     }

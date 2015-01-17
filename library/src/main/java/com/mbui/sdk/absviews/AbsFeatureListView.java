@@ -10,6 +10,7 @@ import android.widget.ListAdapter;
 
 import com.mbui.sdk.R;
 import com.mbui.sdk.feature.abs.AbsViewFeature;
+import com.mbui.sdk.feature.callback.AddFeatureCallBack;
 import com.mbui.sdk.feature.callback.ComputeScrollCallBack;
 import com.mbui.sdk.feature.callback.DispatchTouchEventCallBack;
 import com.mbui.sdk.feature.callback.InterceptTouchEventCallBack;
@@ -17,7 +18,10 @@ import com.mbui.sdk.feature.callback.ScrollCallBack;
 import com.mbui.sdk.feature.callback.SetAdapterCallBack;
 import com.mbui.sdk.feature.callback.TouchEventCallBack;
 import com.mbui.sdk.feature.enums.PullRefreshEnum;
-import com.mbui.sdk.feature.pullrefresh.features.listview.PullToRefreshFeature;
+import com.mbui.sdk.feature.pullrefresh.features.commmon.PullToRefreshFeature;
+import com.mbui.sdk.feature.pullrefresh.features.commmon.PullTipFeature;
+import com.mbui.sdk.feature.pullrefresh.features.listview.SecPullFeature;
+import com.mbui.sdk.feature.pullrefresh.features.listview.SmoothListFeature;
 import com.mbui.sdk.util.Debug;
 
 import java.util.ArrayList;
@@ -49,23 +53,43 @@ public abstract class AbsFeatureListView extends FixedListView implements AbsFea
         constructor(context, attrs, defStyleAttr);
     }
 
-    public void constructor(Context context, AttributeSet attrs, int defStyleAttr) {
+    private void constructor(Context context, AttributeSet attrs, int defStyleAttr) {
         this.initSelf();
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.feature);
             String value = a.getString(R.styleable.feature_listview);
-            if (value == null || value.length() == 0) return;
+            if (value == null || value.length() == 0) {
+                a.recycle();
+                return;
+            }
             AbsViewFeature<FixedListView> innerFeature;
             switch (Integer.parseInt(value)) {
+                case PullRefreshEnum.SmoothListFeature:
+                    innerFeature = new SmoothListFeature(context);
+                    mFeatureList.add(innerFeature);
+                    innerFeature.setHost(this);
+                    innerFeature.constructor(context, attrs, defStyleAttr);
+                    break;
                 case PullRefreshEnum.PullToRefreshFeature:
                     innerFeature = new PullToRefreshFeature(context);
                     mFeatureList.add(innerFeature);
                     innerFeature.setHost(this);
                     innerFeature.constructor(context, attrs, defStyleAttr);
                     break;
-                case PullRefreshEnum.TipFeature:
+                case PullRefreshEnum.PullTipFeature:
+                    innerFeature = new PullTipFeature(context);
+                    mFeatureList.add(innerFeature);
+                    innerFeature.setHost(this);
+                    innerFeature.constructor(context, attrs, defStyleAttr);
+                    break;
+                case PullRefreshEnum.SecPullFeature:
+                    innerFeature = new SecPullFeature(context);
+                    mFeatureList.add(innerFeature);
+                    innerFeature.setHost(this);
+                    innerFeature.constructor(context, attrs, defStyleAttr);
                     break;
             }
+            a.recycle();
         }
     }
 
@@ -80,8 +104,14 @@ public abstract class AbsFeatureListView extends FixedListView implements AbsFea
     @Override
     public void addFeature(@NonNull AbsViewFeature<FixedListView> feature) {
         if (!mFeatureList.contains(feature)) {
+            if (feature instanceof AddFeatureCallBack) {
+                ((AddFeatureCallBack) feature).beforeAddFeature(feature);
+            }
             mFeatureList.add(feature);
             feature.setHost(this);
+            if (feature instanceof AddFeatureCallBack) {
+                ((AddFeatureCallBack) feature).afterAddFeature(feature);
+            }
         } else {
             Debug.print(debug, "添加失败，" + feature.getClass().getSimpleName() + " 已存在！！！");
         }
@@ -118,34 +148,24 @@ public abstract class AbsFeatureListView extends FixedListView implements AbsFea
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        for (AbsViewFeature<FixedListView> feature : mFeatureList) {
-            if (feature instanceof ScrollCallBack) {
-                ((ScrollCallBack) feature).beforeOnScrollStateChanged(view, scrollState != SCROLL_STATE_IDLE);
-            }
-        }
         if (this.mOnScrollListener != null) {
             mOnScrollListener.onScrollStateChanged(view, scrollState);
         }
         for (AbsViewFeature<FixedListView> feature : mFeatureList) {
             if (feature instanceof ScrollCallBack) {
-                ((ScrollCallBack) feature).afterOnScrollStateChanged(view, scrollState != SCROLL_STATE_IDLE);
+                ((ScrollCallBack) feature).onScrollStateChanged(view, scrollState != SCROLL_STATE_IDLE);
             }
         }
     }
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        for (AbsViewFeature<FixedListView> feature : mFeatureList) {
-            if (feature instanceof ScrollCallBack) {
-                ((ScrollCallBack) feature).beforeOnScroll(view);
-            }
-        }
         if (this.mOnScrollListener != null) {
             mOnScrollListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
         }
         for (AbsViewFeature<FixedListView> feature : mFeatureList) {
             if (feature instanceof ScrollCallBack) {
-                ((ScrollCallBack) feature).afterOnScroll(view);
+                ((ScrollCallBack) feature).onScroll(view);
             }
         }
     }
