@@ -24,7 +24,7 @@ public class SecPullFeature extends ListViewFeatureBuilder<FixedListView> implem
 
     private static final String debug = "SecPullFeature";
     private RefreshController mRefreshController;
-    private ListView mListView;
+    private FixedListView mListView;
     private SecondItemScrollCallBack itemScrollCallBack;
 
     public SecPullFeature(Context context) {
@@ -44,12 +44,12 @@ public class SecPullFeature extends ListViewFeatureBuilder<FixedListView> implem
     }
 
     @Override
-    public void stopScroll() {
+    public void onStopScroll() {
 
     }
 
     @Override
-    public void resetLayout() {
+    public void onResetLayout() {
 
     }
 
@@ -103,13 +103,13 @@ public class SecPullFeature extends ListViewFeatureBuilder<FixedListView> implem
     }
 
     @Override
-    public void afterOnScrollStateChanged(View view, boolean isScrolling) {
+    public void onScrollStateChanged(View view, boolean isScrolling) {
 
     }
 
     @Override
-    public void afterOnScroll(View view) {
-        if (arrivedTop()) {
+    public void onScroll(View view) {
+        if (mListView.arrivedTop()) {
             onSecondItemScroll(0);
             if (mListView.getChildCount() > 1 && mListView.getChildAt(1) != null && mListView.getChildAt(0) != null) {
                 float alpha = 1.0f * (-mListView.getChildAt(0).getTop() - mRefreshController.getHeaderHeight()) / mListView.getChildAt(1).getHeight();
@@ -128,7 +128,7 @@ public class SecPullFeature extends ListViewFeatureBuilder<FixedListView> implem
             onSecondItemScroll(1.0f);
         }
 
-        if (arrivedTop() && mListView.getChildCount() > 1 && mListView.getChildAt(1) != null) {
+        if (mListView.arrivedTop() && mListView.getChildCount() > 1 && mListView.getChildAt(1) != null) {
             onItemScroll(mListView.getChildAt(1), -mListView.getChildAt(0).getTop() - mRefreshController.getHeaderHeight());
         }
         if (mListView.getFirstVisiblePosition() == 1) {
@@ -141,16 +141,6 @@ public class SecPullFeature extends ListViewFeatureBuilder<FixedListView> implem
             if (distanceY < 0) distanceY = 0;
             ViewHelper.setTranslationY(view, distanceY / 1.5f);
         }
-    }
-
-    @Override
-    public void beforeOnScrollStateChanged(View view, boolean isScrolling) {
-
-    }
-
-    @Override
-    public void beforeOnScroll(View view) {
-
     }
 
     public void onSecondItemScroll(float percent) {

@@ -5,7 +5,6 @@ import android.os.Build;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
-import android.widget.ListView;
 
 import com.mbui.sdk.absviews.FixedListView;
 import com.mbui.sdk.feature.pullrefresh.RefreshController;
@@ -51,16 +50,16 @@ public class SmoothListFeature extends ListViewFeatureBuilder<FixedListView> {
     }
 
     @Override
-    public void afterOnScroll(View view) {
-        super.afterOnScroll(view);
+    public void onScroll(View view) {
+        super.onScroll(view);
         boolean ITEM_FLAG_BOTH_SCROLL = footerAdder != null && controller.getDownMode() == PullModeBuilder.PullMode.PULL_SMOOTH
-                && arrivedTop() && absArrivedBottom();
-        ListView mListView = getHost();
+                && getHost().arrivedTop() && absArrivedBottom();
+        FixedListView mListView = getHost();
         if (!addF && ITEM_FLAG_BOTH_SCROLL && mListView.getBottom() - mListView.getTop() - controller.getFooterView().getTop() >= footerAdder.getMeasuredHeight()) {
             addF = true;
             int hh = mListView.getBottom() - mListView.getTop() - controller.getFooterView().getTop() - footerAdder.getMeasuredHeight() + 1;
             UIViewUtil.onSetSize(footerAdder, hh);
-        } else if (addF && !ITEM_FLAG_BOTH_SCROLL && footerAdder != null && !arrivedBottom()) {
+        } else if (addF && !ITEM_FLAG_BOTH_SCROLL && footerAdder != null && !mListView.arrivedBottom()) {
             addF = false;
             UIViewUtil.onSetSize(footerAdder, 0);
         }

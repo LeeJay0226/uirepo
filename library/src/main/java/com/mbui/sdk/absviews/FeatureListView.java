@@ -1,6 +1,7 @@
 package com.mbui.sdk.absviews;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.View;
@@ -13,6 +14,9 @@ import java.util.ArrayDeque;
 
 /**
  * Created by chenwei on 15/1/14.
+ * <p/>
+ * 对addHeaderView和addFooterView进行重载，以保证Feature中自带的Header/Footer
+ * 位于最顶端/底端，并保证不会重复添加
  */
 public class FeatureListView extends AbsFeatureListView {
 
@@ -142,5 +146,19 @@ public class FeatureListView extends AbsFeatureListView {
     @Override
     public View getLastFooter() {
         return footerList.isEmpty() ? null : footerList.getLast();
+    }
+
+    @Override
+    public boolean arrivedTop() {
+        return getFirstVisiblePosition() <= 0;
+    }
+
+    @Override
+    public boolean arrivedBottom() {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
+            return getLastVisiblePosition() == getCount() - 1 && !arrivedTop();
+        } else {
+            return getLastVisiblePosition() == getCount() - 2 && !arrivedTop();
+        }
     }
 }

@@ -54,13 +54,13 @@ ADDED from AndroidManifest.xml:21:9
 		ADDED from AndroidManifest.xml:23:13
 	android:name
 		ADDED from AndroidManifest.xml:22:13
-activity#com.uirepo.sample.featurelistview.RefreshFeatureActivity
+activity#com.uirepo.sample.featurelistview.RefreshListViewActivity
 ADDED from AndroidManifest.xml:25:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:27:13
 	android:name
 		ADDED from AndroidManifest.xml:26:13
-activity#com.uirepo.sample.featurelistview.TipFeatureActivity
+activity#com.uirepo.sample.featurelistview.TipListViewActivity
 ADDED from AndroidManifest.xml:28:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:30:13
@@ -72,12 +72,18 @@ ADDED from AndroidManifest.xml:31:9
 		ADDED from AndroidManifest.xml:33:13
 	android:name
 		ADDED from AndroidManifest.xml:32:13
-activity#com.uirepo.sample.featurescrollview.ScrollViewActivity
+activity#com.uirepo.sample.featurescrollview.RefreshScrollViewActivity
 ADDED from AndroidManifest.xml:34:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:36:13
 	android:name
 		ADDED from AndroidManifest.xml:35:13
+activity#com.uirepo.sample.featurescrollview.TipScrollViewActivity
+ADDED from AndroidManifest.xml:37:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:39:13
+	android:name
+		ADDED from AndroidManifest.xml:38:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.android.support:appcompat-v7:21.0.3:15:5

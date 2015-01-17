@@ -15,6 +15,10 @@
             <enum name="PullTipFeature" value="2" />
             <enum name="SecPullFeature" value="3" />
         </attr>
+        <attr name="scrollview">
+            <enum name="PullToRefreshFeature" value="1" />
+            <enum name="PullTipFeature" value="2" />
+        </attr>
     </declare-styleable>
 
 </resources>
