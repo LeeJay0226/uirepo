@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.mbui.sdk.absviews.FeatureListView;
 import com.mbui.sdk.absviews.FixedListView;
 import com.mbui.sdk.feature.pullrefresh.callback.OnLoadCallBack;
-import com.mbui.sdk.feature.pullrefresh.features.commmon.PullToRefreshFeature;
+import com.mbui.sdk.feature.pullrefresh.features.common.PullToRefreshFeature;
 import com.uirepo.sample.R;
 
 import java.util.ArrayList;

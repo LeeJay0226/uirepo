@@ -15,8 +15,8 @@ import com.mbui.sdk.feature.callback.InterceptTouchEventCallBack;
 import com.mbui.sdk.feature.callback.ScrollCallBack;
 import com.mbui.sdk.feature.callback.TouchEventCallBack;
 import com.mbui.sdk.feature.enums.PullRefreshEnum;
-import com.mbui.sdk.feature.pullrefresh.features.commmon.PullTipFeature;
-import com.mbui.sdk.feature.pullrefresh.features.commmon.PullToRefreshFeature;
+import com.mbui.sdk.feature.pullrefresh.features.common.PullTipFeature;
+import com.mbui.sdk.feature.pullrefresh.features.common.PullToRefreshFeature;
 import com.mbui.sdk.util.Debug;
 
 import java.util.ArrayList;

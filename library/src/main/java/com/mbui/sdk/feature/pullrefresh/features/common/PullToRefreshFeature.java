@@ -1,4 +1,4 @@
-package com.mbui.sdk.feature.pullrefresh.features.commmon;
+package com.mbui.sdk.feature.pullrefresh.features.common;
 
 import android.content.Context;
 import android.view.LayoutInflater;

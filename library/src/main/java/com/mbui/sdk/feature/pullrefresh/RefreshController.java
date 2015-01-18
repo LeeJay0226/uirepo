@@ -88,7 +88,7 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
      * @return
      */
     public View getControllerView() {
-        if (viewFeature.getHost() instanceof View) {
+        if (controllerView == null && viewFeature.getHost() instanceof View) {
             controllerView = (View) (viewFeature.getHost());
         }
         return controllerView;

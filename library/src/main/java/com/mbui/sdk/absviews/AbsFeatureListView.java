@@ -18,8 +18,8 @@ import com.mbui.sdk.feature.callback.ScrollCallBack;
 import com.mbui.sdk.feature.callback.SetAdapterCallBack;
 import com.mbui.sdk.feature.callback.TouchEventCallBack;
 import com.mbui.sdk.feature.enums.PullRefreshEnum;
-import com.mbui.sdk.feature.pullrefresh.features.commmon.PullTipFeature;
-import com.mbui.sdk.feature.pullrefresh.features.commmon.PullToRefreshFeature;
+import com.mbui.sdk.feature.pullrefresh.features.common.PullTipFeature;
+import com.mbui.sdk.feature.pullrefresh.features.common.PullToRefreshFeature;
 import com.mbui.sdk.feature.pullrefresh.features.listview.SecPullFeature;
 import com.mbui.sdk.feature.pullrefresh.features.listview.SmoothListFeature;
 import com.mbui.sdk.util.Debug;
@@ -71,13 +71,13 @@ public abstract class AbsFeatureListView extends FixedListView implements AbsFea
                     innerFeature.constructor(context, attrs, defStyleAttr);
                     break;
                 case PullRefreshEnum.PullToRefreshFeature:
-                    innerFeature = new PullToRefreshFeature(context);
+                    innerFeature = new PullToRefreshFeature<>(context);
                     mFeatureList.add(innerFeature);
                     innerFeature.setHost(this);
                     innerFeature.constructor(context, attrs, defStyleAttr);
                     break;
                 case PullRefreshEnum.PullTipFeature:
-                    innerFeature = new PullTipFeature(context);
+                    innerFeature = new PullTipFeature<>(context);
                     mFeatureList.add(innerFeature);
                     innerFeature.setHost(this);
                     innerFeature.constructor(context, attrs, defStyleAttr);
