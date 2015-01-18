@@ -8,8 +8,8 @@ import android.widget.ListView;
 import com.mbui.sdk.absviews.FixedListView;
 import com.mbui.sdk.feature.callback.ScrollCallBack;
 import com.mbui.sdk.feature.pullrefresh.RefreshController;
-import com.mbui.sdk.feature.pullrefresh.builders.ListViewFeatureBuilder;
 import com.mbui.sdk.feature.pullrefresh.builders.PullModeBuilder;
+import com.mbui.sdk.feature.pullrefresh.builders.RefreshFeatureBuilder;
 import com.mbui.sdk.feature.pullrefresh.callback.ControllerCallBack;
 import com.mbui.sdk.feature.pullrefresh.callback.SecondItemScrollCallBack;
 import com.mbui.sdk.util.Debug;
@@ -19,7 +19,7 @@ import com.nineoldandroids.view.ViewHelper;
 /**
  * Created by chenwei on 15/1/15.
  */
-public class SecPullFeature extends ListViewFeatureBuilder<FixedListView> implements ControllerCallBack,
+public class SecPullFeature extends RefreshFeatureBuilder<FixedListView> implements ControllerCallBack,
         ScrollCallBack {
 
     private static final String debug = "SecPullFeature";

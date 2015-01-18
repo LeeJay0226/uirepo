@@ -9,15 +9,15 @@ import android.widget.TextView;
 import com.mbui.sdk.R;
 import com.mbui.sdk.feature.pullrefresh.RefreshController;
 import com.mbui.sdk.feature.pullrefresh.builders.HeaderFooterBuilder;
-import com.mbui.sdk.feature.pullrefresh.builders.ListViewFeatureBuilder;
 import com.mbui.sdk.feature.pullrefresh.builders.PullModeBuilder;
+import com.mbui.sdk.feature.pullrefresh.builders.RefreshFeatureBuilder;
 import com.mbui.sdk.feature.pullrefresh.callback.ControllerCallBack;
 import com.mbui.sdk.util.Debug;
 
 /**
  * Created by chenwei on 15/1/17.
  */
-public class PullToRefreshFeature<T extends HeaderFooterBuilder> extends ListViewFeatureBuilder<T> implements ControllerCallBack {
+public class PullToRefreshFeature<T extends HeaderFooterBuilder> extends RefreshFeatureBuilder<T> implements ControllerCallBack {
 
     private static final String debug = "PullToRefreshFeature";
     private RefreshController mRefreshController;

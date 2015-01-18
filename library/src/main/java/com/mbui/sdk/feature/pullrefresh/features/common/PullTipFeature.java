@@ -10,8 +10,8 @@ import android.widget.TextView;
 import com.mbui.sdk.R;
 import com.mbui.sdk.feature.pullrefresh.RefreshController;
 import com.mbui.sdk.feature.pullrefresh.builders.HeaderFooterBuilder;
-import com.mbui.sdk.feature.pullrefresh.builders.ListViewFeatureBuilder;
 import com.mbui.sdk.feature.pullrefresh.builders.PullModeBuilder;
+import com.mbui.sdk.feature.pullrefresh.builders.RefreshFeatureBuilder;
 import com.mbui.sdk.feature.pullrefresh.callback.ControllerCallBack;
 import com.mbui.sdk.util.DataProvider;
 import com.mbui.sdk.util.Debug;
@@ -20,7 +20,7 @@ import com.mbui.sdk.util.UITextUtil;
 /**
  * Created by chenwei on 15/1/15.
  */
-public class PullTipFeature<T extends HeaderFooterBuilder> extends ListViewFeatureBuilder<T> implements ControllerCallBack {
+public class PullTipFeature<T extends HeaderFooterBuilder> extends RefreshFeatureBuilder<T> implements ControllerCallBack {
 
     private static final String debug = "PullTipFeature";
     private RefreshController mRefreshController;
