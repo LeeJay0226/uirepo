@@ -100,6 +100,8 @@ public class SecPullFeature extends RefreshFeatureBuilder<FixedListView> impleme
                 child.setLayoutParams(params);
             }
         }
+        if (itemScrollCallBack != null)
+            itemScrollCallBack.onUpPull(view,disY);
     }
 
     @Override

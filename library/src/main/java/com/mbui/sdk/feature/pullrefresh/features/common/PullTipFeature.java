@@ -88,6 +88,14 @@ public class PullTipFeature<T extends HeaderFooterBuilder> extends RefreshFeatur
         this.downTipView = downTipView;
     }
 
+    public void setHeaderText(String text) {
+        if (upTipView != null) upTipView.setText(text);
+    }
+
+    public void setFooterText(String text) {
+        if (downTipView != null) downTipView.setText(text);
+    }
+
     /**
      * 为自带的header设置显示图标
      *

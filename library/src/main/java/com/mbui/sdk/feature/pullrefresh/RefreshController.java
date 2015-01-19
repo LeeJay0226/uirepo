@@ -569,21 +569,19 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
 
     //防止底部多次刷新
     private boolean autoDownRefreshLock;
-    private int viewBottom;
 
     @Override
     public void onScrollStateChanged(View view, boolean isScrolling) {
-        if (!isScrolling && viewFeature.getHost() != null && viewFeature.getHost().arrivedBottom()) {
+        if (viewFeature.getHost() == null) return;
+        if (!viewFeature.getHost().arrivedBottom()) {
+            autoDownRefreshLock = false;
+        } else if (!isScrolling) {
             if (downMode == PullMode.PULL_AUTO) {
                 if (!autoDownRefreshLock) {
                     autoDownRefreshLock = true;
-                    viewBottom = view == null ? 0 : view.getBottom();
                     onDownRefresh();
                 }
             }
-        } else {
-            if (!isScrolling || (view != null && viewBottom != view.getBottom()))
-                autoDownRefreshLock = false;
         }
     }
 

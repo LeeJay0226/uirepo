@@ -17,13 +17,13 @@ import com.mbui.sdk.util.Debug;
 /**
  * Created by chenwei on 15/1/17.
  */
-public class PullToRefreshFeature<T extends HeaderFooterBuilder> extends RefreshFeatureBuilder<T> implements ControllerCallBack{
+public class PullToRefreshFeature<T extends HeaderFooterBuilder> extends RefreshFeatureBuilder<T> implements ControllerCallBack {
 
     private static final String debug = "PullToRefreshFeature";
     private RefreshController mRefreshController;
     private View sysHeader, sysFooter, downLoadingView, noMoreView;
     private FooterMode footerMode = FooterMode.SHOW_LOADING;
-    private TextView headerText;
+    private TextView headerText, footerText;
 
     public static enum FooterMode {
         SHOW_NO_MORE, SHOW_LOADING
@@ -40,7 +40,8 @@ public class PullToRefreshFeature<T extends HeaderFooterBuilder> extends Refresh
         sysHeader = inflater.inflate(R.layout.ui_pull_to_header, null);
         sysFooter = inflater.inflate(R.layout.ui_pull_to_footer, null);
         headerText = (TextView) sysHeader.findViewById(R.id.loading_header_text);
-        ((TextView) sysFooter.findViewById(R.id.loading_footer_text)).setText("没有更多了");
+        footerText = ((TextView) sysFooter.findViewById(R.id.loading_footer_text));
+        footerText.setText("没有更多了");
         mRefreshController.addInnerHeader(sysHeader);
         mRefreshController.addInnerFooter(sysFooter);
         noMoreView = sysFooter;
@@ -71,6 +72,7 @@ public class PullToRefreshFeature<T extends HeaderFooterBuilder> extends Refresh
             }
         }
     }
+
 
     /**
      * 为自带的header设置显示图标
@@ -104,6 +106,16 @@ public class PullToRefreshFeature<T extends HeaderFooterBuilder> extends Refresh
 
     public void setNoMoreVisible(boolean visible) {
         noMoreView.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
+
+    public void setHeaderText(String text) {
+        if (headerText != null)
+            headerText.setText(text);
+    }
+
+    public void setFooterText(String text) {
+        if (footerText != null)
+            footerText.setText(text);
     }
 
     /**
