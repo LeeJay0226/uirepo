@@ -88,7 +88,7 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
      * @return
      */
     public View getControllerView() {
-        if (viewFeature.getHost() instanceof View) {
+        if (controllerView == null && viewFeature.getHost() instanceof View) {
             controllerView = (View) (viewFeature.getHost());
         }
         return controllerView;
@@ -567,18 +567,26 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
         return false;
     }
 
+    //防止底部多次刷新
+    private boolean autoDownRefreshLock;
+
     @Override
     public void onScrollStateChanged(View view, boolean isScrolling) {
-        if (!isScrolling && viewFeature.getHost() != null && viewFeature.getHost().arrivedBottom()) {
+        if (viewFeature.getHost() == null) return;
+        if (!viewFeature.getHost().arrivedBottom()) {
+            autoDownRefreshLock = false;
+        } else if (!isScrolling) {
             if (downMode == PullMode.PULL_AUTO) {
-                onDownRefresh();
+                if (!autoDownRefreshLock) {
+                    autoDownRefreshLock = true;
+                    onDownRefresh();
+                }
             }
         }
     }
 
     @Override
-    public void onScroll(View view) {
+    public void onScroll(View view, int scrollX, int scrollY) {
 
     }
-
 }

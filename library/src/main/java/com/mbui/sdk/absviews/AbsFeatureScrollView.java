@@ -15,8 +15,8 @@ import com.mbui.sdk.feature.callback.InterceptTouchEventCallBack;
 import com.mbui.sdk.feature.callback.ScrollCallBack;
 import com.mbui.sdk.feature.callback.TouchEventCallBack;
 import com.mbui.sdk.feature.enums.PullRefreshEnum;
-import com.mbui.sdk.feature.pullrefresh.features.commmon.PullTipFeature;
-import com.mbui.sdk.feature.pullrefresh.features.commmon.PullToRefreshFeature;
+import com.mbui.sdk.feature.pullrefresh.features.common.PullTipFeature;
+import com.mbui.sdk.feature.pullrefresh.features.common.PullToRefreshFeature;
 import com.mbui.sdk.util.Debug;
 
 import java.util.ArrayList;
@@ -198,7 +198,7 @@ public abstract class AbsFeatureScrollView extends FixedScrollView implements Ab
         super.onScrollChanged(w, h, oldw, oldh);
         for (AbsViewFeature<FixedScrollView> feature : mFeatureList) {
             if (feature instanceof ScrollCallBack) {
-                ((ScrollCallBack) feature).onScroll(this);
+                ((ScrollCallBack) feature).onScroll(this, getScrollX(), getScrollY());
                 ((ScrollCallBack) feature).onScrollStateChanged(this, true);
             }
         }

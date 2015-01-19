@@ -12,7 +12,7 @@ import android.widget.Toast;
 import com.mbui.sdk.absviews.FeatureScrollView;
 import com.mbui.sdk.absviews.FixedScrollView;
 import com.mbui.sdk.feature.pullrefresh.callback.OnLoadCallBack;
-import com.mbui.sdk.feature.pullrefresh.features.commmon.PullTipFeature;
+import com.mbui.sdk.feature.pullrefresh.features.common.PullTipFeature;
 import com.mbui.sdk.util.DataProvider;
 import com.uirepo.sample.R;
 
