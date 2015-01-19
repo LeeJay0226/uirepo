@@ -50,8 +50,8 @@ public class SmoothListFeature extends RefreshFeatureBuilder<FixedListView> {
     }
 
     @Override
-    public void onScroll(View view) {
-        super.onScroll(view);
+    public void onScroll(View view, int scrollX, int scrollY) {
+        super.onScroll(view, scrollX, scrollY);
         boolean ITEM_FLAG_BOTH_SCROLL = footerAdder != null && controller.getDownMode() == PullModeBuilder.PullMode.PULL_SMOOTH
                 && getHost().arrivedTop() && absArrivedBottom();
         FixedListView mListView = getHost();

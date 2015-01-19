@@ -48,7 +48,7 @@ public class RefreshListViewActivity extends ActionBarActivity {
                         if (mAdapter.getCount() < 40) {
                             mAdapter.addDataList(randStringList(15));
                         } else {
-                            mFeature.setFooterMode(PullToRefreshFeature.FooterMode.SHOW_NOMORE);
+                            mFeature.setFooterMode(PullToRefreshFeature.FooterMode.SHOW_NO_MORE);
                         }
                     }
                 }, 1000);

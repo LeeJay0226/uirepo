@@ -108,7 +108,7 @@ public class SecPullFeature extends RefreshFeatureBuilder<FixedListView> impleme
     }
 
     @Override
-    public void onScroll(View view) {
+    public void onScroll(View view,int scrollX,int scrollY) {
         if (mListView.arrivedTop()) {
             onSecondItemScroll(0);
             if (mListView.getChildCount() > 1 && mListView.getChildAt(1) != null && mListView.getChildAt(0) != null) {

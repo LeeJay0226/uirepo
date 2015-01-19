@@ -198,7 +198,7 @@ public abstract class AbsFeatureScrollView extends FixedScrollView implements Ab
         super.onScrollChanged(w, h, oldw, oldh);
         for (AbsViewFeature<FixedScrollView> feature : mFeatureList) {
             if (feature instanceof ScrollCallBack) {
-                ((ScrollCallBack) feature).onScroll(this);
+                ((ScrollCallBack) feature).onScroll(this, getScrollX(), getScrollY());
                 ((ScrollCallBack) feature).onScrollStateChanged(this, true);
             }
         }

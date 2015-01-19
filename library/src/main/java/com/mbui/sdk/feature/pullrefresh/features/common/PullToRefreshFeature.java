@@ -17,7 +17,7 @@ import com.mbui.sdk.util.Debug;
 /**
  * Created by chenwei on 15/1/17.
  */
-public class PullToRefreshFeature<T extends HeaderFooterBuilder> extends RefreshFeatureBuilder<T> implements ControllerCallBack {
+public class PullToRefreshFeature<T extends HeaderFooterBuilder> extends RefreshFeatureBuilder<T> implements ControllerCallBack{
 
     private static final String debug = "PullToRefreshFeature";
     private RefreshController mRefreshController;
@@ -26,7 +26,7 @@ public class PullToRefreshFeature<T extends HeaderFooterBuilder> extends Refresh
     private TextView headerText;
 
     public static enum FooterMode {
-        SHOW_NOMORE, SHOW_LOADING
+        SHOW_NO_MORE, SHOW_LOADING
     }
 
     public PullToRefreshFeature(Context context) {
@@ -58,7 +58,7 @@ public class PullToRefreshFeature<T extends HeaderFooterBuilder> extends Refresh
         if (footerMode != mode) {
             footerMode = mode;
             switch (mode) {
-                case SHOW_NOMORE:
+                case SHOW_NO_MORE:
                     mRefreshController.setDownMode(PullModeBuilder.PullMode.PULL_SMOOTH);
                     setDownLoadingVisible(false);
                     setNoMoreVisible(true);

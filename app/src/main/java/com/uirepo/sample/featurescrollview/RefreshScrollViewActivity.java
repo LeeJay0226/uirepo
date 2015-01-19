@@ -48,7 +48,7 @@ public class RefreshScrollViewActivity extends ActionBarActivity {
                         if (mScrollView.getFooterViewsCount() < 4) {
                             mScrollView.addFooterView(getItem("New Item" + num++));
                         } else {
-                            mFeature.setFooterMode(PullToRefreshFeature.FooterMode.SHOW_NOMORE);
+                            mFeature.setFooterMode(PullToRefreshFeature.FooterMode.SHOW_NO_MORE);
                         }
                     }
                 }, 1000);

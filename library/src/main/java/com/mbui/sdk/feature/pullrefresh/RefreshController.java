@@ -567,30 +567,28 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
         return false;
     }
 
+    //防止底部多次刷新
+    private boolean autoDownRefreshLock;
+    private int viewBottom;
+
     @Override
     public void onScrollStateChanged(View view, boolean isScrolling) {
         if (!isScrolling && viewFeature.getHost() != null && viewFeature.getHost().arrivedBottom()) {
             if (downMode == PullMode.PULL_AUTO) {
-                onDownRefresh();
+                if (!autoDownRefreshLock) {
+                    autoDownRefreshLock = true;
+                    viewBottom = view == null ? 0 : view.getBottom();
+                    onDownRefresh();
+                }
             }
+        } else {
+            if (!isScrolling || (view != null && viewBottom != view.getBottom()))
+                autoDownRefreshLock = false;
         }
     }
 
     @Override
-    public void onScroll(View view) {
+    public void onScroll(View view, int scrollX, int scrollY) {
 
-    }
-
-    /**
-     * Created by chenwei on 14/12/1.
-     */
-    public static interface OnTouchGestureListener {
-        public boolean intercept();
-
-        public boolean onDown(float downX, float downY, long downTime);
-
-        public boolean onTouch(float dX, float dY, long dTime);
-
-        public boolean onUp(float upX, float upY, long upTime);
     }
 }

@@ -165,7 +165,7 @@ public abstract class AbsFeatureListView extends FixedListView implements AbsFea
         }
         for (AbsViewFeature<FixedListView> feature : mFeatureList) {
             if (feature instanceof ScrollCallBack) {
-                ((ScrollCallBack) feature).onScroll(view);
+                ((ScrollCallBack) feature).onScroll(this,getScrollY(),getScrollX());
             }
         }
     }

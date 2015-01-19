@@ -100,7 +100,7 @@ public abstract class RefreshFeatureBuilder<T extends HeaderFooterBuilder> exten
     }
 
     @Override
-    public void onScroll(View view) {
+    public void onScroll(View view,int scrollX,int scrollY) {
 
     }
 
