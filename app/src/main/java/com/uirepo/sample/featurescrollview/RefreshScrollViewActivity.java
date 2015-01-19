@@ -12,7 +12,7 @@ import android.widget.Toast;
 import com.mbui.sdk.absviews.FeatureScrollView;
 import com.mbui.sdk.absviews.FixedScrollView;
 import com.mbui.sdk.feature.pullrefresh.callback.OnLoadCallBack;
-import com.mbui.sdk.feature.pullrefresh.features.commmon.PullToRefreshFeature;
+import com.mbui.sdk.feature.pullrefresh.features.common.PullToRefreshFeature;
 import com.uirepo.sample.R;
 
 /**
@@ -45,10 +45,12 @@ public class RefreshScrollViewActivity extends ActionBarActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (mScrollView.getFooterViewsCount() < 4) {
-                            mScrollView.addFooterView(getItem("New Item" + num++));
+                        if (mScrollView.getFooterViewsCount() < 8) {
+                            for (int i = 0; i < 4; i++)
+                                mScrollView.addFooterView(getItem("New Item" + num++));
+                            mFeature.getRefreshController().loseDownRefreshLock();
                         } else {
-                            mFeature.setFooterMode(PullToRefreshFeature.FooterMode.SHOW_NOMORE);
+                            mFeature.setFooterMode(PullToRefreshFeature.FooterMode.SHOW_NO_MORE);
                         }
                     }
                 }, 1000);

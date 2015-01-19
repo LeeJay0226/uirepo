@@ -9,5 +9,5 @@ public interface ScrollCallBack {
 
     public void onScrollStateChanged(View view, boolean isScrolling);
 
-    public void onScroll(View view);
+    public void onScroll(View view,int scrollX,int scrollY);
 }
