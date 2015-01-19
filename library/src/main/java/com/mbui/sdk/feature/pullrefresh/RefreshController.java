@@ -585,6 +585,10 @@ public class RefreshController implements GestureDetector.OnGestureListener, Tou
         }
     }
 
+    public void loseDownRefreshLock() {
+        autoDownRefreshLock = false;
+    }
+
     @Override
     public void onScroll(View view, int scrollX, int scrollY) {
 

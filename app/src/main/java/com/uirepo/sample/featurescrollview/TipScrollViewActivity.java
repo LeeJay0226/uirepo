@@ -54,6 +54,7 @@ public class TipScrollViewActivity extends ActionBarActivity {
                     public void run() {
                         if (mListView.getFooterViewsCount() < 4) {
                             mListView.addFooterView(getItem("New Item " + num++));
+                            mFeature.getRefreshController().loseDownRefreshLock();
                         } else {
                             mFeature.setFooterMode(PullTipFeature.FooterMode.SHOW_TIP);
                         }

@@ -14,5 +14,6 @@
         android:paddingRight="12dp"
         android:divider="@color/no_color"
         android:dividerHeight="12dp"
-        android:listSelector="@color/no_color" />
+        android:listSelector="@color/no_color"
+        android:scrollbars="none"/>
 </LinearLayout>
